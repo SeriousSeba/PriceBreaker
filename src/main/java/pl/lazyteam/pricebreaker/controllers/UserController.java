@@ -7,11 +7,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.thymeleaf.context.WebContext;
-import pl.lazyteam.pricebreaker.Entity.User;
-import pl.lazyteam.pricebreaker.Entity.UserRole;
-import pl.lazyteam.pricebreaker.dao.UserDao;
 import pl.lazyteam.pricebreaker.form.RegisterForm;
 import pl.lazyteam.pricebreaker.service.UserServiceImpl;
 import pl.lazyteam.pricebreaker.validator.RegistrationValidator;
@@ -56,5 +52,6 @@ public class UserController
             return "registerSuccess";
         }
     }
+
 
 }

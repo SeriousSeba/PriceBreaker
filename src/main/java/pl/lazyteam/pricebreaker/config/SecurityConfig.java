@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
@@ -17,11 +18,16 @@ import pl.lazyteam.pricebreaker.service.LoginServiceImpl;
 
 @Repository
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter
-{
+public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-/*    @Autowired
+    @Autowired
     LoginServiceImpl loginServiceImpl;
+
+    @Override
+    @Bean
+    public UserDetailsService userDetailsServiceBean() throws Exception {
+        return new LoginServiceImpl();
+    }
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception
@@ -38,20 +44,30 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
         authenticationProvider.setPasswordEncoder(passwordEncoder());
 
         return authenticationProvider;
-    }*/
+    }
 
     @Bean
-    public PasswordEncoder passwordEncoder()
-    {
+    public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    protected void configure(HttpSecurity http) throws Exception
-    {
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
 
-        http.authorizeRequests().antMatchers("/register","/registerSuccess").permitAll();
-        http.authorizeRequests().antMatchers("/home").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')");
+        http.authorizeRequests().antMatchers("/register", "/registerSuccess", "/login", "/logout").permitAll();
+        http.authorizeRequests().antMatchers("/home", "/").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')");
 
+        http.authorizeRequests().and().formLogin()
+                .loginProcessingUrl("/j_spring_security_check")
+                .loginPage("/login")
+                .failureUrl("/login?error=true")
+                .usernameParameter("username")
+                .passwordParameter("password")
+                .and().logout().logoutUrl("/j_spring_security_logout")
+                .logoutSuccessUrl("/login");
     }
+
+
+
 }
