@@ -1,33 +1,38 @@
 package pl.lazyteam.pricebreaker.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+import pl.lazyteam.pricebreaker.Entity.User;
+import pl.lazyteam.pricebreaker.dao.LoginDao;
 
-//TODO
+import java.util.ArrayList;
+import java.util.List;
 
-
-//@Service
-public class LoginServiceImpl// implements UserDetailsService
+@Service
+public class LoginServiceImpl implements UserDetailsService
 {
-/*    LoginDao logindao;
+
+    LoginDao logindao;
 
     @Autowired
-    public void setLogindao(LoginDao logindao)
+    public void setLoginDao(LoginDao logindao)
     {
         this.logindao = logindao;
     }
-
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException
     {
-        User user = logindao.findClient(username);
-
+        User user = logindao.findUser(username);
         if(user == null)
         {
             throw new UsernameNotFoundException("User doesn't exist in database");
         }
-
         List<String> roles = logindao.getUserRoles(username);
         List<GrantedAuthority> grantList = new ArrayList<GrantedAuthority>();
-
         if(roles != null)
         {
             for(String role : roles)
@@ -36,9 +41,7 @@ public class LoginServiceImpl// implements UserDetailsService
                 grantList.add(auth);
             }
         }
-
         UserDetails userDetails = new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), grantList);
-
         return userDetails;
-    }*/
+    }
 }
