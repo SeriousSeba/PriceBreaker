@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import pl.lazyteam.pricebreaker.Entity.User;
+import pl.lazyteam.pricebreaker.entity.User;
 import pl.lazyteam.pricebreaker.dao.LoginDao;
 
 import java.util.ArrayList;

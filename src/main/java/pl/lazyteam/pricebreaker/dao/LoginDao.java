@@ -1,6 +1,6 @@
 package pl.lazyteam.pricebreaker.dao;
 
-import pl.lazyteam.pricebreaker.Entity.User;
+import pl.lazyteam.pricebreaker.entity.User;
 import java.util.List;
 
 

@@ -1,4 +1,4 @@
-package pl.lazyteam.pricebreaker.Entity;
+package pl.lazyteam.pricebreaker.entity;
 
 import javax.persistence.*;
 

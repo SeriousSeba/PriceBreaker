@@ -28,7 +28,7 @@ public class LoginController {
             WebContext context = new org.thymeleaf.context.WebContext(null, null, null);
             context.setVariable("loginForm", new LoginForm());
         }
-        return "login";
+        return "user/login/login";
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
@@ -44,6 +44,6 @@ public class LoginController {
 
     @RequestMapping(value ="/home", method = RequestMethod.GET)
     public String home(){
-        return "home";
+        return "user/home";
     }
 }

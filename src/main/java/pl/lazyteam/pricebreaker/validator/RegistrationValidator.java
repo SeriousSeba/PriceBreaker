@@ -12,7 +12,7 @@ import pl.lazyteam.pricebreaker.service.UserServiceImpl;
 public class RegistrationValidator implements Validator
 {
     @Autowired
-    UserServiceImpl userServiceImpl;
+    UserServiceImpl userService;
 
     public boolean supports(Class<?> aClass)
     {
@@ -34,12 +34,12 @@ public class RegistrationValidator implements Validator
             errors.rejectValue("password", "notMatch.confirmPassword");
         }
 
-        if(userServiceImpl.userExists(registerForm.getUsername()))
+        if(userService.userExists(registerForm.getUsername()))
         {
             errors.rejectValue("username", "exists.username");
         }
 
-        if(userServiceImpl.emailExists(registerForm.getEmail()))
+        if(userService.emailExists(registerForm.getEmail()))
         {
             errors.rejectValue("email", "exists.email");
         }

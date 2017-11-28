@@ -1,4 +1,4 @@
-package pl.lazyteam.pricebreaker.Entity;
+package pl.lazyteam.pricebreaker.entity;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -15,7 +15,7 @@ public class User
     private String username;
     private String password;
 
-    @OneToOne(cascade = CascadeType.ALL)
+        @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private UserRole userRole;
 

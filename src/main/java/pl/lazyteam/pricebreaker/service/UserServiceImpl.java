@@ -1,10 +1,13 @@
 package pl.lazyteam.pricebreaker.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import pl.lazyteam.pricebreaker.Entity.User;
-import pl.lazyteam.pricebreaker.Entity.UserRole;
+import pl.lazyteam.pricebreaker.entity.User;
+import pl.lazyteam.pricebreaker.entity.UserRole;
 import pl.lazyteam.pricebreaker.dao.UserDao;
 
 import java.util.List;
@@ -27,6 +30,21 @@ public class UserServiceImpl implements UserService
     public User findUserByUsername(String username)
     {
         return userDao.findByUsername(username).get(0);
+    }
+
+    public boolean validatePassword(String password)
+    {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String encPassword = findUserByUsername(auth.getName()).getPassword();
+        if (BCrypt.checkpw(password,encPassword))
+            return true;
+        return false;
+    }
+
+    @Override
+    public void delete(String username)
+    {
+        userDao.deleteByUsername(username);
     }
 
     @Override

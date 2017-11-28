@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Edit</title>
+    <link rel="stylesheet" type="text/css" media="all"
+          href="/../css/main.css" th:href="@{/../css/main.css}" />
+</head>
+<body>
+<h2></h2>
+<h1> Edit user: <th th:text="${user.username}"></th></h1>
+    <table border = "1">
+        <tr>
+            <td><a th:href="@{'/changePassword/' + ${user.username}}">Change Password</a></td>
+        </tr>
+        <tr>
+            <td><a th:href="@{'/users/edit/deleteUser/' + ${user.username}}">Delete User</a></td>
+        </tr>
+    </table>
+</body>
+</html>

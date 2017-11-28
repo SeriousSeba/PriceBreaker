@@ -1,22 +1,28 @@
 package pl.lazyteam.pricebreaker.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.thymeleaf.context.WebContext;
+import pl.lazyteam.pricebreaker.form.PasswordChangeForm;
 import pl.lazyteam.pricebreaker.form.RegisterForm;
 import pl.lazyteam.pricebreaker.service.UserServiceImpl;
+import pl.lazyteam.pricebreaker.validator.PasswordChangeValidator;
 import pl.lazyteam.pricebreaker.validator.RegistrationValidator;
+
+import java.util.ArrayList;
 
 @Controller
 public class UserController
 {
-/*    @Autowired
-    RegistrationValidator registrationValidator;*/
 
     @Autowired
     UserServiceImpl userService;
@@ -24,34 +30,79 @@ public class UserController
     @Autowired
     RegistrationValidator registrationValidator;
 
+    @Autowired
+    PasswordChangeValidator passwordChangeValidator;
 
-    @RequestMapping(value = "/register", method = RequestMethod.GET)
+
+
+    @GetMapping(value ="/changePassword/{username}")
+    public String changePassword(@PathVariable("username") String username, Model model)
+    {
+
+        if (false)
+        {
+            WebContext context = new org.thymeleaf.context.WebContext(null, null, null);
+            context.setVariable("passwordChangeForm", new PasswordChangeForm());
+        }
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+        if(!auth.getName().equals(username) && !(new ArrayList<GrantedAuthority>(auth.getAuthorities()).get(0).getAuthority()).equals("ROLE_ADMIN"))
+        {
+            return "user/error/accessDenied";
+        }
+
+        PasswordChangeForm passwordChangeForm = new PasswordChangeForm();
+        passwordChangeForm.setUsername(username);
+        model.addAttribute("passwordChangeForm", passwordChangeForm);
+        return "user/password/changePassword";
+    }
+
+    @PostMapping(value = "passwordChangeSuccess")
+    public String passwordChangeSuccess(@ModelAttribute("passwordChangeForm") PasswordChangeForm passwordChangeForm, Model model, BindingResult result)
+    {
+        passwordChangeValidator.validate(passwordChangeForm, result);
+        if(result.hasErrors())
+        {
+            return "user/password/changePassword";
+        }
+        else
+        {
+            userService.update(passwordChangeForm.getUsername(), passwordChangeForm.getNewPassword());
+            return "user/password/passwordChangeSuccess";
+        }
+    }
+
+    @GetMapping(value = "/register")
     public String register(Model model)
     {
-        model.addAttribute("registerForm", new RegisterForm());
-        //w wersji intellij'a < 2017.3 coś nie działa i bez tego warunku nie wykrywa nazwy obiektu w htmlu
         if (false)
         {
             WebContext context = new org.thymeleaf.context.WebContext(null, null, null);
             context.setVariable("registerForm", new RegisterForm());
         }
-        return "register";
+        model.addAttribute("registerForm", new RegisterForm());
+        return "user/register/register";
     }
 
-    @RequestMapping(value = "/registerSuccess", method = RequestMethod.POST)
+    @PostMapping(value = "/registerSuccess")
     public String submitSuccess(@ModelAttribute("registerForm") RegisterForm registerForm, Model model, BindingResult result)
     {
         registrationValidator.validate(registerForm, result);
         if(result.hasErrors())
         {
-            return "register";
+            return "user/register/register";
         }
         else
         {
             userService.add(registerForm.getUsername(), registerForm.getPassword(), registerForm.getEmail());
-            return "registerSuccess";
+            return "user/register/registerSuccess";
         }
     }
 
+    @GetMapping(value = "/accessDenied")
+    public String accessDenied()
+    {
+        return "user/error/accessDenied";
+    }
 
 }

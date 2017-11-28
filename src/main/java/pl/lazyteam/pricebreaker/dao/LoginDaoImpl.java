@@ -1,13 +1,10 @@
 package pl.lazyteam.pricebreaker.dao;
 
 
-import com.fasterxml.classmate.AnnotationConfiguration;
-import org.hibernate.Query;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
-import pl.lazyteam.pricebreaker.Entity.User;
+import pl.lazyteam.pricebreaker.entity.User;
 
 import java.util.ArrayList;
 import java.util.List;
