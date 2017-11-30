@@ -3,22 +3,51 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Users</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" media="all"
           href="/../css/main.css" th:href="@{/../css/main.css}" />
 </head>
-<body>
-<h2></h2>
-<p th:text="${message}"></p>
-<h1>Users</h1>
-    <table border = "1">
-        <tr>
-            <td>Username</td>
-            <td></td>
-        </tr>
-        <tr th:each="user : ${users}">
-            <td th:text="${user.username}"></td>
-            <td><a th:href="@{'users/edit/' + ${user.username}}">Edit</a></td>
-        </tr>
-    </table>
+<body class="bg">
+<div class="container full-height">
+    <div class="row form-height">
+        <div class="col-sm-6 col-sm-offset-3 well offset4 form-v-middle">
+            <div class="">
+                <div class="text-success">
+                    <h3 th:text="${message}"></h3>
+                </div>
+            </div>
+            <div class="">
+                <div class="text-warning">
+                    <h3>Users</h3>
+                </div>
+            </div>
+            <div class="">
+                <table class="table table-bordered">
+                    <tr>
+                        <td class="text-center"><b>USERNAME</b></td>
+                        <td class="text-center"><b>ACTION</b></td>
+                    </tr>
+                    <tr th:each="user : ${users}">
+                        <td th:text="${user.username}" class="text-center"></td>
+                        <td>
+                            <div class="dropdown text-center">
+                                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                                    Edit
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" th:href="@{'/changePassword/' + ${user.username}}">Change password</a></li>
+                                    <li><a class="dropdown-item" th:href="@{'/users/edit/deleteUser/' + ${user.username}}">Delete</a></li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/webjars/jquery/3.1.1/jquery.min.js"></script>
+<script src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
 </body>
 </html>

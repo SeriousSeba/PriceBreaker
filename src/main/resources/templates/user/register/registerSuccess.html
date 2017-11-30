@@ -3,10 +3,21 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Registered</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" media="all"
           href="/../css/main.css" th:href="@{/../css/main.css}" />
 </head>
-<body>
-<h1>Congratulations, you've successfully registered on our site and your account has been added to the database</h1>
+<body class="bg">
+<div class="container full-height">
+    <div class="row form-height">
+        <div class="col-sm-6 col-sm-offset-3 well offset4 form-v-middle">
+            <h1 class="alert alert-success text-center">Congratulations, you've successfully registered on our site!</h1>
+            <a th:href="@{'/login'}" class="btn btn-default col-sm-12">Login</a>
+
+        </div>
+    </div>
+</div>
+<script src="/webjars/jquery/3.1.1/jquery.min.js"></script>
+<script src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </body>
 </html>

@@ -1,5 +1,6 @@
 package pl.lazyteam.pricebreaker.controllers;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -10,12 +11,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.thymeleaf.context.WebContext;
 import pl.lazyteam.pricebreaker.form.LoginForm;
+import pl.lazyteam.pricebreaker.service.UserServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 @Controller
 @RequestMapping("/")
 public class LoginController {
+
+    @Autowired
+    UserServiceImpl userService;
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login(Model model, @RequestParam(value="error", required = false) String error){
@@ -43,7 +48,8 @@ public class LoginController {
     }
 
     @RequestMapping(value ="/home", method = RequestMethod.GET)
-    public String home(){
+    public String home(Model model){
+        model.addAttribute("user", userService.findUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName()));
         return "user/home";
     }
 }

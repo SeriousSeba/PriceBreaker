@@ -3,14 +3,30 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Home</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" media="all"
           href="/../css/main.css" th:href="@{/../css/main.css}" />
 </head>
-<body>
-<h2></h2>
-<h1>Home</h1>
-<form action="#" th:action="logout">
-    <input type="submit" th:value="Submit"/>
-</form>
+<body class="bg">
+<div class="container full-height">
+    <div class="row form-height">
+        <div class="col-sm-6 col-sm-offset-3 well offset4 form-v-middle">
+            <div class="">
+                <div class="text-warning">
+                    <h3 class="text-center"><b>Welcome <th th:text="${user.username}"></th></b></h3>
+                </div>
+            </div>
+            <div class="">
+                <a th:href="@{'/changePassword/' + ${user.username}}" class="btn btn-primary col-sm-12">Change Password</a>
+
+                <a th:if="${user.getUserRole().getUser_role() == 'ROLE_ADMIN'}" th:href="@{'/users'}" class="btn btn-primary col-sm-12">Users</a>
+
+                <a th:href="@{'/logout'}" class="btn btn-default col-sm-12">Logout</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/webjars/jquery/3.1.1/jquery.min.js"></script>
+<script src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </body>
 </html>

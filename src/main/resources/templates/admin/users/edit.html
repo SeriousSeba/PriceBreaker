@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Edit</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" media="all"
           href="/../css/main.css" th:href="@{/../css/main.css}" />
 </head>
@@ -17,5 +18,7 @@
             <td><a th:href="@{'/users/edit/deleteUser/' + ${user.username}}">Delete User</a></td>
         </tr>
     </table>
+<script src="/webjars/jquery/3.1.1/jquery.min.js"></script>
+<script src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </body>
 </html>
