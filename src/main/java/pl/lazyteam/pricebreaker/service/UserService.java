@@ -1,6 +1,7 @@
 package pl.lazyteam.pricebreaker.service;
 
 import pl.lazyteam.pricebreaker.entity.User;
+import pl.lazyteam.pricebreaker.entity.VerificationToken;
 
 import java.util.List;
 
@@ -21,4 +22,10 @@ public interface UserService
     public boolean userExists(String username);
 
     public boolean emailExists(String email);
+
+    public VerificationToken getVerificationToken(String verificationToken);
+
+    public void createVerificationTokenForUser(User user, String token);
+
+    public String validateVerificationToken(String token);
 }

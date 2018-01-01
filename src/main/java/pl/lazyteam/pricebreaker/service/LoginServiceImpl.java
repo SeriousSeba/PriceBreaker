@@ -41,7 +41,7 @@ public class LoginServiceImpl implements UserDetailsService
                 grantList.add(auth);
             }
         }
-        UserDetails userDetails = new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), grantList);
+        UserDetails userDetails = new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.isEnabled(), true, true, true, grantList);
         return userDetails;
     }
 }

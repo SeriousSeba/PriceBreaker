@@ -6,10 +6,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import pl.lazyteam.pricebreaker.dao.TokenDao;
 import pl.lazyteam.pricebreaker.entity.User;
 import pl.lazyteam.pricebreaker.entity.UserRole;
 import pl.lazyteam.pricebreaker.dao.UserDao;
+import pl.lazyteam.pricebreaker.entity.VerificationToken;
 
+import java.util.Calendar;
 import java.util.List;
 
 @Service
@@ -19,7 +22,14 @@ public class UserServiceImpl implements UserService
     UserDao userDao;
 
     @Autowired
+    TokenDao tokenDao;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
+
+    public static final String TOKEN_INVALID = "invalidToken";
+    public static final String TOKEN_EXPIRED = "expired";
+    public static final String TOKEN_VALID = "valid";
 
 
     public List<User> list()
@@ -66,6 +76,41 @@ public class UserServiceImpl implements UserService
     {
         User user = new User(username, passwordEncoder.encode(password), email, new UserRole(username, "ROLE_USER"));
         userDao.save(user);
+    }
+
+
+    @Override
+    public VerificationToken getVerificationToken(String verificationToken)
+    {
+        return tokenDao.findVerificationTokenByToken(verificationToken);
+    }
+
+    @Override
+    public void createVerificationTokenForUser(final User user, final String token) {
+        VerificationToken myToken = new VerificationToken(token, user);
+        tokenDao.save(myToken);
+    }
+
+    @Override
+    public String validateVerificationToken(String token)
+    {
+        VerificationToken verificationToken = tokenDao.findVerificationTokenByToken(token);
+        if (verificationToken == null)
+        {
+            return TOKEN_INVALID;
+        }
+
+        User user = verificationToken.getUser();
+        Calendar cal = Calendar.getInstance();
+        if ((verificationToken.getExpiryDate().getTime() - cal.getTime().getTime()) <= 0)
+        {
+            tokenDao.delete(verificationToken);
+            return TOKEN_EXPIRED;
+        }
+
+        user.setEnabled(true);
+        userDao.save(user);
+        return TOKEN_VALID;
     }
 
     public boolean userExists(String username)

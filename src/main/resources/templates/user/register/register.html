@@ -8,6 +8,20 @@
           href="/../css/main.css" th:href="@{/../css/main.css}" />
 </head>
 <body class="bg">
+
+<!-- Navbar -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" th:href="@{'/home'}">PriceBreaker</a>
+        </div>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a th:href="@{'/login'}"><span class="glyphicon glyphicon-log-in"></span> LOGIN</a></li>
+            <li class="active"><a th:href="@{'/register'}"><span class="glyphicon glyphicon-user"></span> REGISTER</a></li>
+        </ul>
+    </div>
+</nav>
+
 <div class="container full-height">
     <div class="row form-height">
         <div class="col-sm-6 col-sm-offset-3 well offset4 form-v-middle">

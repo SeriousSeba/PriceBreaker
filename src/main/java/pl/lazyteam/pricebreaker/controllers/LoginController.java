@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.thymeleaf.context.WebContext;
+import pl.lazyteam.pricebreaker.entity.User;
+import pl.lazyteam.pricebreaker.entity.UserRole;
 import pl.lazyteam.pricebreaker.form.LoginForm;
 import pl.lazyteam.pricebreaker.service.UserServiceImpl;
 
@@ -24,6 +26,7 @@ public class LoginController {
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login(Model model, @RequestParam(value="error", required = false) String error){
+
         model.addAttribute("loginForm", new LoginForm());
         if(error != null){
             model.addAttribute("loginError", true);

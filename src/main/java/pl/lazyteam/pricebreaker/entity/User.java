@@ -14,8 +14,9 @@ public class User
     private int user_id;
     private String username;
     private String password;
+    private boolean enabled;
 
-        @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private UserRole userRole;
 
@@ -30,12 +31,15 @@ public class User
     }
 
     public User(){};
+
     public User(String username, String password, String email, UserRole userRole)
     {
+
         this.username = username;
         this.password = password;
         this.email = email;
         this.userRole = userRole;
+        this.enabled = false;
     }
 
     private String email;
@@ -78,5 +82,15 @@ public class User
     public void setEmail(String email)
     {
         this.email = email;
+    }
+
+    public boolean isEnabled()
+    {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled)
+    {
+        this.enabled = enabled;
     }
 }

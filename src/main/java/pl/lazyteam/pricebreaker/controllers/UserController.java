@@ -1,17 +1,20 @@
 package pl.lazyteam.pricebreaker.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.MessageSource;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.thymeleaf.context.WebContext;
+import pl.lazyteam.pricebreaker.entity.User;
+import pl.lazyteam.pricebreaker.event.OnRegistrationCompleteEvent;
 import pl.lazyteam.pricebreaker.form.PasswordChangeForm;
 import pl.lazyteam.pricebreaker.form.RegisterForm;
 import pl.lazyteam.pricebreaker.service.UserServiceImpl;
@@ -19,6 +22,7 @@ import pl.lazyteam.pricebreaker.validator.PasswordChangeValidator;
 import pl.lazyteam.pricebreaker.validator.RegistrationValidator;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 @Controller
 public class UserController
@@ -32,6 +36,10 @@ public class UserController
 
     @Autowired
     PasswordChangeValidator passwordChangeValidator;
+
+    @Autowired
+    ApplicationEventPublisher eventPublisher;
+
 
 
 
@@ -54,6 +62,7 @@ public class UserController
         PasswordChangeForm passwordChangeForm = new PasswordChangeForm();
         passwordChangeForm.setUsername(username);
         model.addAttribute("passwordChangeForm", passwordChangeForm);
+        model.addAttribute("user", userService.findUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName()));
         return "user/password/changePassword";
     }
 
@@ -63,11 +72,13 @@ public class UserController
         passwordChangeValidator.validate(passwordChangeForm, result);
         if(result.hasErrors())
         {
+            model.addAttribute("user", userService.findUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName()));
             return "user/password/changePassword";
         }
         else
         {
             userService.update(passwordChangeForm.getUsername(), passwordChangeForm.getNewPassword());
+            model.addAttribute("user", userService.findUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName()));
             return "user/password/passwordChangeSuccess";
         }
     }
@@ -85,7 +96,7 @@ public class UserController
     }
 
     @PostMapping(value = "/registerSuccess")
-    public String submitSuccess(@ModelAttribute("registerForm") RegisterForm registerForm, Model model, BindingResult result)
+    public String submitSuccess(@ModelAttribute("registerForm") RegisterForm registerForm, Model model, BindingResult result, WebRequest request)
     {
         registrationValidator.validate(registerForm, result);
         if(result.hasErrors())
@@ -95,14 +106,50 @@ public class UserController
         else
         {
             userService.add(registerForm.getUsername(), registerForm.getPassword(), registerForm.getEmail());
+            try
+            {
+                User user = userService.findUserByUsername(registerForm.getUsername());
+                String appUrl = request.getContextPath();
+                eventPublisher.publishEvent(new OnRegistrationCompleteEvent(user, appUrl));
+            }catch (Exception e)
+            {
+                System.out.println("Email error");
+                return "user/register/emailError";
+            }
+
             return "user/register/registerSuccess";
         }
+    }
+
+    @GetMapping(value = "/registerConfirm")
+    public String registerConfirm(Model model, @RequestParam("token") String token,  RedirectAttributes redirectAttributes)
+    {
+        String result = userService.validateVerificationToken(token);
+        if(result.equals("valid"))
+        {
+            redirectAttributes.addFlashAttribute("message", "Account activated");
+            return "redirect:/accountActivated";
+        }
+        redirectAttributes.addFlashAttribute("message", "Account activation link has expired or is invalid");
+        return "redirect:/emailError";
     }
 
     @GetMapping(value = "/accessDenied")
     public String accessDenied()
     {
         return "user/error/accessDenied";
+    }
+
+    @GetMapping(value = "/emailError")
+    public String emailError()
+    {
+        return "user/error/emailError";
+    }
+
+    @GetMapping(value = "/accountActivated")
+    public String accountActivated()
+    {
+        return "user/register/accountActivated";
     }
 
 }

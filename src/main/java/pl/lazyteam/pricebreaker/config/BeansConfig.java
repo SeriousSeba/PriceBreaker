@@ -11,7 +11,7 @@ public class BeansConfig
     public ResourceBundleMessageSource messageSource()
     {
         ResourceBundleMessageSource rb = new ResourceBundleMessageSource();
-        rb.setBasenames(new String[]{ "validation" });
+        rb.setBasenames(new String[]{ "messages" });
         return rb;
     }
 }

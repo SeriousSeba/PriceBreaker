@@ -8,6 +8,26 @@
           href="/../css/main.css" th:href="@{/../css/main.css}" />
 </head>
 <body class="bg">
+
+<!-- Navbar -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" th:href="@{'/home'}">PriceBreaker</a>
+        </div>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">MY PROFILE
+                    <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a th:href="@{'/changePassword/' + ${user.username}}">CHANGE PASSWORD</a></li>
+                </ul>
+            </li>
+            <li><a th:href="@{'/logout'}"><span class="glyphicon glyphicon-log-out"></span> LOGOUT</a></li>
+        </ul>
+    </div>
+</nav>
+
 <div class="container full-height">
     <div class="row form-height">
         <div class="col-sm-6 col-sm-offset-3 well offset4 form-v-middle">
@@ -27,19 +47,21 @@
                         <td class="text-center"><b>USERNAME</b></td>
                         <td class="text-center"><b>ACTION</b></td>
                     </tr>
-                    <tr th:each="user : ${users}">
-                        <td th:text="${user.username}" class="text-center"></td>
-                        <td>
-                            <div class="dropdown text-center">
-                                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
-                                    Edit
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" th:href="@{'/changePassword/' + ${user.username}}">Change password</a></li>
-                                    <li><a class="dropdown-item" th:href="@{'/users/edit/deleteUser/' + ${user.username}}">Delete</a></li>
-                                </ul>
-                            </div>
-                        </td>
+                    <tr th:each="userFromList : ${users}">
+                        <div th:if="${user.username != userFromList.username}">
+                            <td th:text="${userFromList.username}" class="text-center"></td>
+                            <td>
+                                <div class="dropdown text-center">
+                                    <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                                        Edit
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" th:href="@{'/changePassword/' + ${userFromList.username}}">Change password</a></li>
+                                        <li><a class="dropdown-item" th:href="@{'/users/deleteUser/' + ${userFromList.username}}">Delete</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </div>
                     </tr>
                 </table>
             </div>
