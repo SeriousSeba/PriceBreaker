@@ -51,4 +51,12 @@ public class UserRole
     {
         this.user_role = user_role;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj instanceof UserRole){
+            if(((UserRole) obj).getUser_role() == this.user_role && ((UserRole) obj).getUsername()==this.username && ((UserRole) obj).getUser_id()== this.user_id) return true;
+        }
+        return false;
+    }
 }
