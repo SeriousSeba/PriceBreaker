@@ -7,4 +7,24 @@
 .full-height {height:100vh;}/* 100% of the view-height */
 .form-height {margin-top:-130px;}/* minus half the form-height */
 .form-v-middle {margin-top:50vh;}/* half the view-height */
+.button , .button:hover, .button:visited, .button:active, .button:link{
+    background-color: #333;
+    border: none;
+    color: white;
+    padding: 40px 90px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+.awesomeIcon{
+    font-size: 72px;
+}
+
+.button i{
+    font-size:72px;
+}
 

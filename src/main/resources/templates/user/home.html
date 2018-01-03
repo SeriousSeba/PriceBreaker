@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" media="all"
           href="/../css/main.css" th:href="@{/../css/main.css}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
 </head>
 <body class="bg">
 
@@ -38,6 +39,16 @@
             </div>
             <div class="">
                 <a th:if="${user.getUserRole().getUser_role() == 'ROLE_ADMIN'}" th:href="@{'/users'}" class="btn btn-primary col-sm-12">Users</a>
+            </div>
+
+            <div style="text-align:center;">
+                <a href="#" class="button">
+                    <i class="fa fa-search-plus"></i> <br/>Search
+                </a>
+
+                <a href="#" class="button">
+                    <i class="fa fa-list" aria-hidden="true"></i> <br/>List
+                </a>
             </div>
         </div>
     </div>
