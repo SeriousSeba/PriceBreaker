@@ -13,8 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import pl.lazyteam.pricebreaker.service.LoginServiceImpl;
 
-//TODO
-
 
 @Repository
 @EnableWebSecurity
@@ -55,8 +53,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
 
-        http.authorizeRequests().antMatchers("/register", "/registerSuccess", "/login", "/logout").permitAll();
-        http.authorizeRequests().antMatchers("/home", "/").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')");
+        http.authorizeRequests().antMatchers("/register", "/registerSuccess", "/login", "/emailError", "/registerConfirm", "/accountActivated").permitAll();
+        http.authorizeRequests().antMatchers("/home", "/", "/logout",  "/changePassword/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')");
+        http.authorizeRequests().antMatchers("/users/**").access("hasRole('ROLE_ADMIN')");
 
         http.authorizeRequests().and().formLogin()
                 .loginProcessingUrl("/j_spring_security_check")
@@ -65,7 +64,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("username")
                 .passwordParameter("password")
                 .and().logout().logoutUrl("/j_spring_security_logout")
-                .logoutSuccessUrl("/login");
+                .logoutSuccessUrl("/login")
+                .and().exceptionHandling().accessDeniedPage("/accessDenied");
     }
 
 

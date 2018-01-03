@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import pl.lazyteam.pricebreaker.Entity.User;
+import pl.lazyteam.pricebreaker.entity.User;
 import pl.lazyteam.pricebreaker.dao.LoginDao;
 
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ public class LoginServiceImpl implements UserDetailsService
                 grantList.add(auth);
             }
         }
-        UserDetails userDetails = new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), grantList);
+        UserDetails userDetails = new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), user.isEnabled(), true, true, true, grantList);
         return userDetails;
     }
 }

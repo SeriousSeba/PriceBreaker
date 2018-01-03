@@ -1,7 +1,6 @@
 package pl.lazyteam.pricebreaker.config;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ResourceBundleMessageSource;
 
@@ -12,7 +11,7 @@ public class BeansConfig
     public ResourceBundleMessageSource messageSource()
     {
         ResourceBundleMessageSource rb = new ResourceBundleMessageSource();
-        rb.setBasenames(new String[]{ "validation" });
+        rb.setBasenames(new String[]{ "messages" });
         return rb;
     }
 }

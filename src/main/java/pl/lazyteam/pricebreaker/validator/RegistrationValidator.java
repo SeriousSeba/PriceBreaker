@@ -8,11 +8,18 @@ import org.springframework.validation.Validator;
 import pl.lazyteam.pricebreaker.form.RegisterForm;
 import pl.lazyteam.pricebreaker.service.UserServiceImpl;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @Component
 public class RegistrationValidator implements Validator
 {
     @Autowired
-    UserServiceImpl userServiceImpl;
+    UserServiceImpl userService;
+
+    private Pattern pattern;
+    private Matcher matcher;
+    private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-+]+(.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(.[A-Za-z0-9]+)*(.[A-Za-z]{2,})$";
 
     public boolean supports(Class<?> aClass)
     {
@@ -34,14 +41,26 @@ public class RegistrationValidator implements Validator
             errors.rejectValue("password", "notMatch.confirmPassword");
         }
 
-        if(userServiceImpl.userExists(registerForm.getUsername()))
+        if(userService.userExists(registerForm.getUsername()))
         {
             errors.rejectValue("username", "exists.username");
         }
 
-        if(userServiceImpl.emailExists(registerForm.getEmail()))
+        if(!emailIsValid(registerForm.getEmail()))
+        {
+            errors.rejectValue("email", "invalid.email");
+        }
+
+        if(userService.emailExists(registerForm.getEmail()))
         {
             errors.rejectValue("email", "exists.email");
         }
+    }
+
+    private boolean emailIsValid(String email)
+    {
+        pattern = Pattern.compile(EMAIL_PATTERN);
+        matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 }
