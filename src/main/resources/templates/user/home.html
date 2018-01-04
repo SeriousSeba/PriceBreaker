@@ -4,8 +4,7 @@
     <meta charset="UTF-8"/>
     <title>Home</title>
     <link rel="stylesheet" href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" media="all"
-          href="/../css/main.css" th:href="@{/../css/main.css}" />
+    <link href="../static/css/main.css" th:href="@{/css/main.css}" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
 </head>
 <body class="bg">
@@ -37,17 +36,22 @@
                     <h3 class="text-center"><b>Welcome <th th:text="${user.username}"></th></b></h3>
                 </div>
             </div>
-            <div class="">
-                <a th:if="${user.getUserRole().getUser_role() == 'ROLE_ADMIN'}" th:href="@{'/users'}" class="btn btn-primary col-sm-12">Users</a>
-            </div>
 
-            <div style="text-align:center;">
+            <div>
                 <a href="#" class="button">
                     <i class="fa fa-search-plus"></i> <br/>Search
                 </a>
 
-                <a href="#" class="button">
+                <a th:if="${user.getUserRole().getUser_role() == 'ROLE_ADMIN'}" th:href="@{'/products/all'}" class="button">
+                    <i class="fa fa-list" aria-hidden="true"></i> <br/>All products
+                </a>
+
+                <a th:if="${user.getUserRole().getUser_role() == 'ROLE_USER'}" href="#" class="button">
                     <i class="fa fa-list" aria-hidden="true"></i> <br/>List
+                </a>
+
+                <a class="button" th:if="${user.getUserRole().getUser_role() == 'ROLE_ADMIN'}" th:href="@{'/users'}" >
+                    <i class="fa fa-users" aria-hidden="true"></i> <br/>Users
                 </a>
             </div>
         </div>

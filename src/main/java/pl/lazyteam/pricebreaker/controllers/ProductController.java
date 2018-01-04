@@ -3,6 +3,7 @@ package pl.lazyteam.pricebreaker.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import pl.lazyteam.pricebreaker.dao.ProductDAO;
@@ -16,17 +17,21 @@ public class ProductController {
     ProductDAO productDAO;
 
     @GetMapping("products/{id}")
-    public ResponseEntity<ProductInfo> getProductById(@PathVariable(value="id") Long id){
+    public ProductInfo getProductById(@PathVariable(value="id") Long id){
         ProductInfo productInfo=productDAO.findOne(id);
-        if(productInfo == null){
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok().body(productInfo);
+        return productInfo;
     }
 
     @GetMapping("/products/all")
-    public List<ProductInfo> getAllProducts(){
+    public List<ProductInfo> getAllProducts(Model model){
+        model.addAttribute("productsList", productDAO.findAll());
         return productDAO.findAll();
+    }
+
+    @GetMapping("/products/delete/{id}")
+    public String delete(@PathVariable(value="id") Long id){
+        productDAO.delete(id);
+        return "redirect:/products/all";
     }
 
 

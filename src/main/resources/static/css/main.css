@@ -11,8 +11,11 @@
     background-color: #333;
     border: none;
     color: white;
-    padding: 40px 90px;
+    width: 247px;
+    height: 174px;
+    padding: 40px;
     text-align: center;
+    vertical-align: middle;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
