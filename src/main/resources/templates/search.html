@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Registered</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link href="../static/css/main.css" th:href="@{/css/main.css}" rel="stylesheet" />
+</head>
+<body class="bg">
+
+<!-- Navbar -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" th:href="@{'/home'}">PriceBreaker</a>
+        </div>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">MY PROFILE
+                    <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a th:href="@{'/changePassword/'}">CHANGE PASSWORD</a></li>
+                </ul>
+            </li>
+            <li><a th:href="@{'/logout'}"><span class="glyphicon glyphicon-log-out"></span> LOGOUT</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container full-height">
+    <div class="row form-height">
+        <div class="col-sm-6 col-sm-offset-3 well offset4 form-v-middle">
+            <div class="">
+                <div class="text-warning">
+                    <h3>Search</h3>
+                </div>
+            </div>
+            <div class="">
+                <form action="#" th:action="@{/search}" th:object="${searchForm}" method="GETs">
+                    <div class="form-group">
+                        <input type="text" th:field="*{product}" class="form-control" />
+                        <label th:if="${#fields.hasErrors('product')}" th:errors="${searchForm.product}"  th:class="'error'"></label>
+                    </div>
+                    <button type="submit" class="btn btn-warning col-sm-12"><strong>Search</strong></button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-sm-offset-3 well offset4  well">
+        <div class="">
+            <table class="table table-bordered">
+                <tr>
+                    <td class="text-center"><b>Image</b></td>
+                    <td class="text-center"><b>Product Name</b></td>
+                    <td class="text-center"><b>Price</b></td>
+                    <td class="text-center"><b>Score</b></td>
+                    <td class="text-center"><b>Shop</b></td>
+                    <td class="text-center"><b>Add</b></td>
+                </tr>
+                <tr th:each="product : ${productsList}">
+                    <div >
+                        <td class="text-center"><img th:src="${product.productImageUrl}" style="height:40px; width:40px;"/> </td>
+                        <td th:text="${product.productName}" class="text-center"></td>
+                        <td th:text="${product.productBottom}" class="text-center"></td>
+                        <td th:text="${product.productScore}" class="text-center"></td>
+                        <td class="text-center">
+                            <a class="btn btn-primary" th:href="@{{url}(url=${product.productUrl})}">Go</a>
+                        </td>
+                        <td class="text-center">
+                            <a class="btn btn-primary" href="#">+</a>
+                        </td>
+                    </div>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+<script src="/webjars/jquery/3.1.1/jquery.min.js"></script>
+<script src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+</html>

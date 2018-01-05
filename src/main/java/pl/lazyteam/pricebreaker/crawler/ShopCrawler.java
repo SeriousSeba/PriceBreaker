@@ -3,10 +3,12 @@ package pl.lazyteam.pricebreaker.crawler;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import pl.lazyteam.pricebreaker.crawler.products.ProductInfo;
+import org.thymeleaf.expression.Lists;
+import pl.lazyteam.pricebreaker.entity.ProductInfo;
 import pl.lazyteam.pricebreaker.crawler.shops.WebShop;
 import pl.lazyteam.pricebreaker.crawler.utils.JsonUtils;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -53,6 +55,12 @@ public class ShopCrawler {
         }
         jsonObject.add("array",jsonArray);
         return jsonObject;
+    }
+
+
+    public List<ProductInfo> getProductsList(){
+        ProductInfo[] productInfos = webShop.getProducts(product,limit);
+        return Arrays.asList(productInfos);
     }
 
 

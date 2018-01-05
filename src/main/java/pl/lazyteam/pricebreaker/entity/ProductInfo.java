@@ -24,7 +24,7 @@ public class ProductInfo {
     private Date lastUpdate;
 
 
-    public String getproductImageUrl() { return productImageUrl; }
+    public String getProductImageUrl() { return productImageUrl; }
 
     public void setProductImageUrl(String imageUrl) {
         this.productImageUrl = imageUrl;
@@ -82,7 +82,7 @@ public class ProductInfo {
         stringBuilder.append("Kategoria: " + getProdcutCategory() + "\n");
         stringBuilder.append("Ocena: " + getProductScore() + "\n");
         stringBuilder.append("URL: " + getProductUrl() + "\n");
-        stringBuilder.append("ImageURL: " + getproductImageUrl() + "\n");
+        stringBuilder.append("ImageURL: " + getProductImageUrl() + "\n");
         stringBuilder.append("Najnizsza cena: " + getProductBottom() + "\n\n\n");
         System.out.println(stringBuilder.toString());
 

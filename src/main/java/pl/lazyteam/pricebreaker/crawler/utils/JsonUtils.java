@@ -2,7 +2,7 @@ package pl.lazyteam.pricebreaker.crawler.utils;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import pl.lazyteam.pricebreaker.crawler.products.ProductInfo;
+import pl.lazyteam.pricebreaker.entity.ProductInfo;
 
 
 public class JsonUtils {
@@ -13,7 +13,7 @@ public class JsonUtils {
         jsonObject.addProperty("ProductURL",productInfo.getProductUrl());
         jsonObject.addProperty("ProductCategory",productInfo.getProdcutCategory());
         jsonObject.addProperty("ProductId",productInfo.getProductId());
-        jsonObject.addProperty("ImageURL",productInfo.getproductImageUrl());
+        jsonObject.addProperty("ImageURL",productInfo.getProductImageUrl());
         jsonObject.addProperty("ProductBottom",productInfo.getProductBottom());
         jsonObject.addProperty("ProductScore",productInfo.getProductScore());
         return jsonObject;

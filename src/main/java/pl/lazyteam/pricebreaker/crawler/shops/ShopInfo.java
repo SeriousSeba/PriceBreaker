@@ -1,7 +1,7 @@
 package pl.lazyteam.pricebreaker.crawler.shops;
 
 import org.jsoup.nodes.Element;
-import pl.lazyteam.pricebreaker.crawler.products.ProductInfo;
+import pl.lazyteam.pricebreaker.entity.ProductInfo;
 
 
 public class ShopInfo {
