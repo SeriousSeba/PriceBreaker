@@ -78,7 +78,7 @@ public class ShopInfo {
                 )
         );
 
-        productInfo.setProdcutCategory(
+        productInfo.setProductCategory(
                 element.select("img[alt]").attr("alt")
         );
 

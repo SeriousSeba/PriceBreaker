@@ -1,5 +1,6 @@
 package pl.lazyteam.pricebreaker.dao;
 
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import pl.lazyteam.pricebreaker.entity.User;
@@ -9,7 +10,7 @@ import java.util.List;
 
 @Transactional
 @Repository
-public interface UserDao extends CrudRepository<User, Integer>
+public interface UserDao extends JpaRepository<User, Integer>
 {
     List<User> findAll();
 

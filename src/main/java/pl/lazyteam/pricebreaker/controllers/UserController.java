@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.thymeleaf.context.WebContext;
+import pl.lazyteam.pricebreaker.dao.ProductDAO;
+import pl.lazyteam.pricebreaker.entity.ProductInfo;
 import pl.lazyteam.pricebreaker.entity.User;
 import pl.lazyteam.pricebreaker.event.OnRegistrationCompleteEvent;
 import pl.lazyteam.pricebreaker.form.PasswordChangeForm;
@@ -21,8 +23,8 @@ import pl.lazyteam.pricebreaker.service.UserServiceImpl;
 import pl.lazyteam.pricebreaker.validator.PasswordChangeValidator;
 import pl.lazyteam.pricebreaker.validator.RegistrationValidator;
 
-import java.util.ArrayList;
-import java.util.Locale;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Controller
 public class UserController
@@ -39,6 +41,9 @@ public class UserController
 
     @Autowired
     ApplicationEventPublisher eventPublisher;
+
+    @Autowired
+    ProductDAO productDAO;
 
 
 
@@ -133,6 +138,45 @@ public class UserController
         redirectAttributes.addFlashAttribute("message", "Account activation link has expired or is invalid");
         return "redirect:/emailError";
     }
+
+    @GetMapping("/user/products")
+    public Set<ProductInfo> getAllProducts(Model model){
+        User user=userService.findUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        model.addAttribute("user", user);
+        model.addAttribute("productsSet", user.getProducts());
+        return user.getProducts();
+    }
+
+    //@PostMapping("/user/products/add/{productName}/{productUrl}/{productScore}/{productCategory}/{productBottom}/{productImageUrl}/{productId}")
+    @PostMapping("/user/products/add")
+    public String addProduct(@ModelAttribute(value = "productinfo") ProductInfo productInfo, Model model){
+    //public String addProduct(Model model, @PathVariable("productName") String productName, @PathVariable("productUrl") String productUrl,@PathVariable("productScore") double productScore,@PathVariable("productCategory") String prodcutCategory,@PathVariable("productBottom") double productBottom,@PathVariable("productImageUrl") String productImageUrl,@PathVariable("productId") String productId){
+        /*ProductInfo productInfo=new ProductInfo();
+        productInfo.setProductName(productName);
+        productInfo.setProductUrl(productUrl);
+        productInfo.setProductScore(productScore);
+        productInfo.setProductCategory(prodcutCategory);
+        productInfo.setProductBottom(productBottom);
+        productInfo.setProductImageUrl(productImageUrl);
+        productInfo.setProductId(productId);*/
+        productInfo.setLastUpdate(new Date());
+        User user=userService.findUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+
+        productDAO.save(productInfo);
+        productInfo=productDAO.getOne(productInfo.getId());
+        user.getProducts().add(productInfo);
+        productInfo.getUsers().add(user);
+        userService.updateUser(user);
+        model.addAttribute("user", user);
+        model.addAttribute("productsSet", user.getProducts());
+        return "user/products";
+    }
+
+
+
+
+
+
 
     @GetMapping(value = "/accessDenied")
     public String accessDenied()

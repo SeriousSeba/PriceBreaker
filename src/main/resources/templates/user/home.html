@@ -25,6 +25,15 @@
             </li>
             <li><a th:href="@{'/logout'}"><span class="glyphicon glyphicon-log-out"></span> LOGOUT</a></li>
         </ul>
+        <div class="nav navbar-nav navbar-right">
+            <a class="navbar-brand" th:href="@{'/home'}">Home</a>
+        </div>
+        <div class="nav navbar-nav navbar-right">
+            <a class="navbar-brand" th:href="@{'/user/products'}">My List</a>
+        </div>
+        <div class="nav navbar-nav navbar-right">
+            <a class="navbar-brand" th:href="@{'/search'}">Search</a>
+        </div>
     </div>
 </nav>
 
@@ -46,7 +55,7 @@
                     <i class="fa fa-list" aria-hidden="true"></i> <br/>All products
                 </a>
 
-                <a th:if="${user.getUserRole().getUser_role() == 'ROLE_USER'}" href="#" class="button">
+                <a th:if="${user.getUserRole().getUser_role() == 'ROLE_USER'}" th:href="@{'/user/products'}" class="button">
                     <i class="fa fa-list" aria-hidden="true"></i> <br/>List
                 </a>
 

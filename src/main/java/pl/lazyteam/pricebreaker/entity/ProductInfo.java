@@ -1,9 +1,13 @@
 package pl.lazyteam.pricebreaker.entity;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
 
 @Entity
 @Table(name = "products")
@@ -17,11 +21,27 @@ public class ProductInfo {
     private double productScore;
     private String productId;
     private double productBottom;
-    private String prodcutCategory;
+    private String productCategory;
 
     @Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
     private Date lastUpdate;
+
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
+    }
+
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            },
+            mappedBy = "products")
+    private Set<User> users = new HashSet<>();
 
 
     public String getProductImageUrl() { return productImageUrl; }
@@ -71,15 +91,15 @@ public class ProductInfo {
     }
 
 
-    public String getProdcutCategory() { return prodcutCategory; }
+    public String getProductCategory() { return productCategory; }
 
-    public void setProdcutCategory(String prodcutCategory) { this.prodcutCategory = prodcutCategory; }
+    public void setProductCategory(String prodcutCategory) { this.productCategory = prodcutCategory; }
 
     public void getInfo(){
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Nazwa: " + getProductName() + "\n");
         stringBuilder.append("Id: " + getProductId() + "\n");
-        stringBuilder.append("Kategoria: " + getProdcutCategory() + "\n");
+        stringBuilder.append("Kategoria: " + getProductCategory() + "\n");
         stringBuilder.append("Ocena: " + getProductScore() + "\n");
         stringBuilder.append("URL: " + getProductUrl() + "\n");
         stringBuilder.append("ImageURL: " + getProductImageUrl() + "\n");

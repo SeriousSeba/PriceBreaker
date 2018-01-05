@@ -12,6 +12,9 @@ import pl.lazyteam.pricebreaker.dao.ProductDAO;
 import pl.lazyteam.pricebreaker.entity.ProductInfo;
 import pl.lazyteam.pricebreaker.form.SearchForm;
 
+import javax.validation.Valid;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Controller
@@ -37,6 +40,13 @@ public class ProductController {
         return "redirect:/products/all";
     }
 
+    @PostMapping("products/add")
+    public ProductInfo add(@Valid @RequestBody ProductInfo productInfo){
+        return productDAO.save(productInfo);
+    }
+
+
+
     @GetMapping("/search")
     public String searchForm(Model model, @RequestParam(value="error", required = false) String error, @RequestParam(value="product", required = false) String product){
 
@@ -57,7 +67,17 @@ public class ProductController {
                     "div[data-pid]");//
             WebShop webShop=new WebShop(shopInfo);
             ShopCrawler shopCrawler=new ShopCrawler(webShop,product,2);
-            model.addAttribute("productsList", shopCrawler.getProductsList());
+            List<ProductInfo> productList=shopCrawler.getProductsList();
+            Collections.sort(productList, new Comparator<ProductInfo>() {
+                @Override
+                public int compare(ProductInfo o1, ProductInfo o2) {
+                    Double price1=o1.getProductBottom();
+                    Double price2=o2.getProductBottom();
+                    return price1.compareTo(price2);
+                }
+            });
+            model.addAttribute("productsList", productList);
+            model.addAttribute("productinfo", new ProductInfo());
         }
         return "/search";
     }
