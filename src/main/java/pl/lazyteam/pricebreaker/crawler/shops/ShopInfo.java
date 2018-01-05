@@ -78,9 +78,15 @@ public class ShopInfo {
                 )
         );
 
-        productInfo.setProdcutCategory(
-                element.select("img[alt]").attr("alt")
-        );
+        try{
+            productInfo.setProdcutCategory(
+                    element.select(".subcat-type-icon").first().select("img").first().attr("alt")
+            );
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            productInfo.setProdcutCategory(null);
+        }
 
         return productInfo;
     }

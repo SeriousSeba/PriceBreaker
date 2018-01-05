@@ -46,12 +46,13 @@
             </div>
         </div>
     </div>
-    <div class="col-sm-6 col-sm-offset-3 well offset4  well">
+    <div class="col-sm-7 col-sm-offset-3 well offset4  well">
         <div class="">
             <table class="table table-bordered">
                 <tr>
                     <td class="text-center"><b>Image</b></td>
                     <td class="text-center"><b>Product Name</b></td>
+                    <td class="text-center"><b>Product Category</b></td>
                     <td class="text-center"><b>Price</b></td>
                     <td class="text-center"><b>Score</b></td>
                     <td class="text-center"><b>Shop</b></td>
@@ -59,8 +60,9 @@
                 </tr>
                 <tr th:each="product : ${productsList}">
                     <div >
-                        <td class="text-center"><img th:src="${product.productImageUrl}" style="height:40px; width:40px;"/> </td>
-                        <td th:text="${product.productName}" class="text-center"></td>
+                        <td class="text-center"><img th:src="${product.productImageUrl}" style="height:120px; width:120px;"/> </td>
+                        <td th:text="${product.productName}" class="text-center" ></td>
+                        <td th:text="${product.prodcutCategory}" class="text-center" ></td>
                         <td th:text="${product.productBottom}" class="text-center"></td>
                         <td th:text="${product.productScore}" class="text-center"></td>
                         <td class="text-center">
@@ -70,6 +72,9 @@
                             <a class="btn btn-primary" href="#">+</a>
                         </td>
                     </div>
+                    <tr>
+                <td class="text-center">Witam</td>
+                    </tr>
                 </tr>
             </table>
         </div>
