@@ -18,6 +18,7 @@ public class ProductInfo {
     private String productId;
     private double productBottom;
     private String prodcutCategory;
+    private String stocks;
 
     @Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
@@ -102,5 +103,13 @@ public class ProductInfo {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getStocks() {
+        return stocks;
+    }
+
+    public void setStocks(String stocks) {
+        this.stocks = stocks;
     }
 }

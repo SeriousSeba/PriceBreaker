@@ -85,8 +85,13 @@ public class ShopInfo {
         }
         catch (Exception e){
             e.printStackTrace();
-            productInfo.setProdcutCategory(null);
+            productInfo.setProdcutCategory("Brak");
         }
+
+
+        productInfo.setStocks(
+                element.select(".listing-shops-number").first().text()
+        );
 
         return productInfo;
     }
