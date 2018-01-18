@@ -4,6 +4,9 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
 
 @Entity
 @Table(name = "products")
@@ -23,6 +26,22 @@ public class ProductInfo {
     @Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
     private Date lastUpdate;
+
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
+    }
+
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            },
+            mappedBy = "products")
+    private Set<User> users = new HashSet<User>();
 
 
     public String getProductImageUrl() { return productImageUrl; }

@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
-    <title>Registered</title>
+    <title>Search</title>
     <link rel="stylesheet" href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
     <link href="../static/css/main.css" th:href="@{/css/main.css}" rel="stylesheet" />
 </head>
@@ -24,6 +24,15 @@
             </li>
             <li><a th:href="@{'/logout'}"><span class="glyphicon glyphicon-log-out"></span> LOGOUT</a></li>
         </ul>
+        <div class="nav navbar-nav navbar-right">
+            <a class="navbar-brand" th:href="@{'/home'}">Home</a>
+        </div>
+        <div class="nav navbar-nav navbar-right">
+            <a class="navbar-brand" th:href="@{'/user/products'}">My List</a>
+        </div>
+        <div class="nav navbar-nav navbar-right">
+            <a class="navbar-brand" th:href="@{'/search'}">Search</a>
+        </div>
     </div>
 </nav>
 
@@ -36,7 +45,7 @@
                 </div>
             </div>
             <div class="">
-                <form action="#" th:action="@{/search}" th:object="${searchForm}" method="GETs">
+                <form action="#" th:action="@{/search}" th:object="${searchForm}" method="GET">
                     <div class="form-group">
                         <input type="text" th:field="*{product}" class="form-control" />
                         <label th:if="${#fields.hasErrors('product')}" th:errors="${searchForm.product}"  th:class="'error'"></label>
@@ -72,7 +81,15 @@
                             <a class="btn btn-primary" th:href="@{{url}(url=${product.productUrl})}">Go</a>
                         </td>
                         <td class="text-center">
-                            <a class="btn btn-primary" href="#">+</a>
+                            <form action="#" th:action="@{/user/products/add}" th:object="${productinfo}" method="post">
+                                <input type="hidden"  th:value="${product.productName}" name="productName" id="productName"/>
+                                <input type="hidden"  th:value="${product.productBottom}" name="productBottom" id="productBottom"/>
+                                <input type="hidden"  th:value="${product.productScore}" name="productScore" id="productScore"/>
+                                <input type="hidden"  th:value="${product.productCategory}" name="productCategory" id="productCategory"/>
+                                <input type="hidden"  th:value="${product.productImageUrl}" name="productImageUrl" id="productImageUrl"/>
+                                <input type="hidden"  th:value="${product.productUrl}" name="productUrl" id="productUrl"/>
+                                <button type="submit" class="btn btn-primary">+</button>
+                            </form>
                         </td>
                     </div>
                     <tr>

@@ -3,6 +3,7 @@ package pl.lazyteam.pricebreaker.entity;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name="users")
@@ -19,6 +20,17 @@ public class User
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private UserRole userRole;
+
+    @ManyToMany(fetch = FetchType.LAZY,cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE
+    })
+    @JoinTable(name="user_products",
+    joinColumns = {@JoinColumn(name="user_id")},
+    inverseJoinColumns = {@JoinColumn(name="product_id")})
+    private Set<ProductInfo> products;
+
+
 
     public UserRole getUserRole()
     {
@@ -92,5 +104,13 @@ public class User
     public void setEnabled(boolean enabled)
     {
         this.enabled = enabled;
+    }
+
+    public Set<ProductInfo> getProducts() {
+        return products;
+    }
+
+    public void setProducts(Set<ProductInfo> products) {
+        this.products = products;
     }
 }

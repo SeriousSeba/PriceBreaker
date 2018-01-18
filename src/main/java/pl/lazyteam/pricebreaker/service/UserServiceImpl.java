@@ -113,6 +113,10 @@ public class UserServiceImpl implements UserService
         return TOKEN_VALID;
     }
 
+    public void updateUser(User user){
+        userDao.save(user);
+    }
+
     public boolean userExists(String username)
     {
         if (userDao.findByUsername(username).size() > 0)

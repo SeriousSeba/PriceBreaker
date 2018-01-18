@@ -11,7 +11,7 @@ public class JsonUtils {
         JsonObject jsonObject=new JsonObject();
         jsonObject.addProperty("ProductName",productInfo.getProductName());
         jsonObject.addProperty("ProductURL",productInfo.getProductUrl());
-        jsonObject.addProperty("ProductCategory",productInfo.getProdcutCategory());
+        jsonObject.addProperty("ProductCategory",productInfo.getProductCategory());
         jsonObject.addProperty("ProductId",productInfo.getProductId());
         jsonObject.addProperty("ImageURL",productInfo.getProductImageUrl());
         jsonObject.addProperty("ProductBottom",productInfo.getProductBottom());
@@ -37,7 +37,7 @@ public class JsonUtils {
         element=jsonObject.get("ProductCategory");
         result = element==null || element.isJsonNull()?
                 null: element.getAsString();
-        productInfo.setProdcutCategory(result);
+        productInfo.setProductCategory(result);
 
         element=jsonObject.get("ProductId");
         result = element==null || element.isJsonNull()?
