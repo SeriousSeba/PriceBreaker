@@ -3,7 +3,7 @@
     color:red;
     font-size: 15px;
 }
-.bg {background-image: url("tmpBackground.jpg"); background-size: cover}
+.bg {background-image: url("tmpBackground.jpg"); background-size: auto; background-repeat: repeat-y}
 .full-height {height:100vh;}/* 100% of the view-height */
 .form-height {margin-top:-130px;}/* minus half the form-height */
 .form-v-middle {margin-top:50vh;}/* half the view-height */
