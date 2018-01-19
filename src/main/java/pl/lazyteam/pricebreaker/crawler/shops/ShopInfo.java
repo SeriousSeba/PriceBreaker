@@ -79,13 +79,13 @@ public class ShopInfo {
         );
 
         try{
-            productInfo.setProdcutCategory(
+            productInfo.setProductCategory(
                     element.select(".subcat-type-icon").first().select("img").first().attr("alt")
             );
         }
         catch (Exception e){
             e.printStackTrace();
-            productInfo.setProdcutCategory("Brak");
+            productInfo.setProductCategory("Brak");
         }
 
 

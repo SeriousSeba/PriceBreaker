@@ -169,6 +169,9 @@ public class UserController
         userService.updateUser(user);
         model.addAttribute("user", user);
         model.addAttribute("productsSet", user.getProducts());
+
+        System.out.println(productInfo.getProductUrl());
+
         return "user/products";
     }
 

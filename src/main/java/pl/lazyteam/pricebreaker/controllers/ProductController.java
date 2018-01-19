@@ -1,26 +1,34 @@
 package pl.lazyteam.pricebreaker.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.context.WebContext;
 import pl.lazyteam.pricebreaker.crawler.ShopCrawler;
+import pl.lazyteam.pricebreaker.crawler.products.ProductUpdater;
 import pl.lazyteam.pricebreaker.crawler.shops.ShopInfo;
 import pl.lazyteam.pricebreaker.crawler.shops.WebShop;
 import pl.lazyteam.pricebreaker.dao.ProductDAO;
+import pl.lazyteam.pricebreaker.dao.UserDao;
 import pl.lazyteam.pricebreaker.entity.ProductInfo;
+import pl.lazyteam.pricebreaker.entity.User;
 import pl.lazyteam.pricebreaker.form.SearchForm;
+import pl.lazyteam.pricebreaker.service.UserService;
 
 import javax.validation.Valid;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 @Controller
 public class ProductController {
     @Autowired
     ProductDAO productDAO;
+
+
+
+    @Autowired
+    UserService userService;
 
     @GetMapping("products/{id}")
     public ProductInfo getProductById(@PathVariable(value="id") Long id){
@@ -36,9 +44,29 @@ public class ProductController {
 
     @GetMapping("/products/delete/{id}")
     public String delete(@PathVariable(value="id") Long id){
+        ProductInfo productInfo=productDAO.getOne(id);
+        Set<User> set=productInfo.getUsers();
+        for(User user:set){
+            user.getProducts().remove(productInfo);
+        }
         productDAO.delete(id);
+
         return "redirect:/products/all";
     }
+
+    @GetMapping("/products/update")
+    public String update(){
+        List<ProductInfo>productInfos=productDAO.findAll();
+        for(ProductInfo productInfo:productInfos) {
+            if(!ProductUpdater.updateProduct(productInfo))
+                productDAO.delete(productInfo.getId());
+            productInfo.setLastUpdate(new Date());
+            productDAO.save(productInfo);
+        }
+        return "redirect:/products/all";
+    }
+
+
 
     @PostMapping("products/add")
     public ProductInfo add(@Valid @RequestBody ProductInfo productInfo){

@@ -20,7 +20,7 @@ public class ProductInfo {
     private double productScore;
     private String productId;
     private double productBottom;
-    private String prodcutCategory;
+    private String productCategory;
     private String stocks;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -78,6 +78,7 @@ public class ProductInfo {
         return productId;
     }
 
+
     public void setProductId(String productId) {
         this.productId = productId;
     }
@@ -91,15 +92,15 @@ public class ProductInfo {
     }
 
 
-    public String getProdcutCategory() { return prodcutCategory; }
+    public String getProductCategory() { return productCategory; }
 
-    public void setProdcutCategory(String prodcutCategory) { this.prodcutCategory = prodcutCategory; }
+    public void setProductCategory(String prodcutCategory) { this.productCategory = prodcutCategory; }
 
     public void getInfo(){
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("Nazwa: " + getProductName() + "\n");
         stringBuilder.append("Id: " + getProductId() + "\n");
-        stringBuilder.append("Kategoria: " + getProdcutCategory() + "\n");
+        stringBuilder.append("Kategoria: " + getProductCategory() + "\n");
         stringBuilder.append("Ocena: " + getProductScore() + "\n");
         stringBuilder.append("URL: " + getProductUrl() + "\n");
         stringBuilder.append("ImageURL: " + getProductImageUrl() + "\n");
