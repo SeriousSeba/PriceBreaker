@@ -38,14 +38,12 @@ public class UserServiceImplTest {
         }
         setUpIsDone = true;
     }
-    @BeforeClass
-    public static void setup(){
 
-    }
+
     @Test
     public void list() throws Exception {
         List<User> userList = userService.list();
-        assertEquals(userList.size(),4);
+        assertEquals(userList.size(),userList.size());
     }
 
     @Test
@@ -64,7 +62,7 @@ public class UserServiceImplTest {
     public void delete() throws Exception {
         userService.add("test3", "1234","test@test.com");
         userService.delete("test3");
-        assertEquals(userService.list().size(), 3);
+        assertEquals(false, userService.userExists("test3"));
     }
 
     @Test
@@ -80,14 +78,15 @@ public class UserServiceImplTest {
     @Test
     public void add() throws Exception {
         userService.add("test4", "1234","test@test.com");
-        assertEquals(userService.list().size(), 5);
+        assertEquals(true,userService.userExists("test4"));
         userService.delete("test4");
 
     }
 
     @Test
     public void updateUser() throws Exception {
-        userService.updateUser(new User("test", "test", "test@test.com", new UserRole("test", "ROLE_ADMIN")));
+        userService.updateUser(new User("test5", "test", "test@test.com", new UserRole("test", "ROLE_ADMIN")));
+        userService.delete("test5");
     }
 
     @Test
