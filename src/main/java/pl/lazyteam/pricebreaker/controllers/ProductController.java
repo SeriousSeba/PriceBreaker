@@ -38,7 +38,8 @@ public class ProductController {
 
     @GetMapping("/products/all")
     public List<ProductInfo> getAllProducts(Model model){
-        model.addAttribute("productsList", productDAO.findAll());
+        if (model != null)
+            model.addAttribute("productsList", productDAO.findAll());
         return productDAO.findAll();
     }
 
