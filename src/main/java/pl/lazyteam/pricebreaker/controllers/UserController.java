@@ -2,7 +2,6 @@ package pl.lazyteam.pricebreaker.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.MessageSource;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,17 +12,21 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.thymeleaf.context.WebContext;
+import pl.lazyteam.pricebreaker.dao.DefaultFlagsDao;
 import pl.lazyteam.pricebreaker.dao.ProductDAO;
+import pl.lazyteam.pricebreaker.dao.ProductFlagsDao;
+import pl.lazyteam.pricebreaker.entity.DefaultUserFlags;
+import pl.lazyteam.pricebreaker.entity.ProductFlags;
 import pl.lazyteam.pricebreaker.entity.ProductInfo;
 import pl.lazyteam.pricebreaker.entity.User;
 import pl.lazyteam.pricebreaker.event.OnRegistrationCompleteEvent;
+import pl.lazyteam.pricebreaker.form.FlagEditForm;
 import pl.lazyteam.pricebreaker.form.PasswordChangeForm;
 import pl.lazyteam.pricebreaker.form.RegisterForm;
 import pl.lazyteam.pricebreaker.service.UserServiceImpl;
 import pl.lazyteam.pricebreaker.validator.PasswordChangeValidator;
 import pl.lazyteam.pricebreaker.validator.RegistrationValidator;
 
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
@@ -44,6 +47,12 @@ public class UserController
 
     @Autowired
     ProductDAO productDAO;
+
+    @Autowired
+    ProductFlagsDao productFlagsDao;
+
+    @Autowired
+    DefaultFlagsDao defaultFlagsDao;
 
 
 
@@ -111,6 +120,7 @@ public class UserController
         else
         {
             userService.add(registerForm.getUsername(), registerForm.getPassword(), registerForm.getEmail());
+            defaultFlagsDao.save(new DefaultUserFlags(userService.findUserByUsername(registerForm.getUsername())));
             try
             {
                 User user = userService.findUserByUsername(registerForm.getUsername());
@@ -143,8 +153,21 @@ public class UserController
     public Set<ProductInfo> getAllProducts(Model model){
         User user=userService.findUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         model.addAttribute("user", user);
-        model.addAttribute("productsSet", user.getProducts());
+        Set<ProductInfo> productsSet = user.getProducts();
+        model.addAttribute("productsSet", productsSet);
         return user.getProducts();
+    }
+
+    @GetMapping(value = "/editProduct/{id}")
+    public String flagsEditted(@PathVariable("id") Long id, Model model)
+    {
+        ProductInfo product = productDAO.getOne(id);
+        ProductFlags productFlags = productFlagsDao.getOne(id);
+        model.addAttribute("product", product);
+        model.addAttribute("productFlags", productFlags);
+        model.addAttribute("flagEditForm", new FlagEditForm());
+
+        return "user/editProduct";
     }
 
     //@PostMapping("/user/products/add/{productName}/{productUrl}/{productScore}/{productCategory}/{productBottom}/{productImageUrl}/{productId}")
@@ -159,10 +182,17 @@ public class UserController
         productInfo.setProductBottom(productBottom);
         productInfo.setProductImageUrl(productImageUrl);
         productInfo.setProductId(productId);*/
+
         productInfo.setLastUpdate(new Date());
         User user=userService.findUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 
         productDAO.save(productInfo);
+
+        //default flags
+        DefaultUserFlags defaultFlags = defaultFlagsDao.getOne(user.getUser_id());
+        ProductFlags productFlag = new ProductFlags(productInfo, defaultFlags.getPriceChange(), defaultFlags.isPrice_lowers());
+        productFlagsDao.save(productFlag);
+
         productInfo=productDAO.getOne(productInfo.getId());
         user.getProducts().add(productInfo);
         productInfo.getUsers().add(user);

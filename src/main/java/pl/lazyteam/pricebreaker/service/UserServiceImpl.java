@@ -6,11 +6,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import pl.lazyteam.pricebreaker.dao.ProductDAO;
+import pl.lazyteam.pricebreaker.dao.ProductFlagsDao;
 import pl.lazyteam.pricebreaker.dao.TokenDao;
-import pl.lazyteam.pricebreaker.entity.User;
-import pl.lazyteam.pricebreaker.entity.UserRole;
+import pl.lazyteam.pricebreaker.entity.*;
 import pl.lazyteam.pricebreaker.dao.UserDao;
-import pl.lazyteam.pricebreaker.entity.VerificationToken;
 
 import java.util.Calendar;
 import java.util.List;
@@ -23,6 +23,12 @@ public class UserServiceImpl implements UserService
 
     @Autowired
     TokenDao tokenDao;
+
+    @Autowired
+    ProductFlagsDao productFlagsDao;
+
+    @Autowired
+    ProductDAO productDAO;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -122,5 +128,37 @@ public class UserServiceImpl implements UserService
         if (userDao.findByUsername(username).size() > 0)
             return true;
         return false;
+    }
+
+    public boolean priceChanged(ProductInfo product, double newPrice)
+    {
+        ProductFlags flags = productFlagsDao.getOne(product.getId());
+        double oldPrice = product.getProductBottom();
+        if (flags.isPrice_lowers())
+        {
+            if (oldPrice > newPrice)
+            {
+                double priceChange = (oldPrice - newPrice)/100 * oldPrice;
+                if (priceChange >= flags.getPriceChange())
+                    return true;
+                else
+                    return false;
+            }
+            else
+                return false;
+        }
+        else
+        {
+            if (oldPrice <= newPrice)
+            {
+                double priceChange = (newPrice - oldPrice)/100 * oldPrice;
+                if (priceChange >= flags.getPriceChange())
+                    return true;
+                else
+                    return false;
+            }
+            else
+                return false;
+        }
     }
 }

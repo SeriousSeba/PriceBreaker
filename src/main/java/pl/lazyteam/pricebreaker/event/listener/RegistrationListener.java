@@ -9,6 +9,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 import pl.lazyteam.pricebreaker.entity.User;
 import pl.lazyteam.pricebreaker.event.OnRegistrationCompleteEvent;
+import pl.lazyteam.pricebreaker.service.EmailService;
 import pl.lazyteam.pricebreaker.service.UserService;
 
 import java.util.UUID;
@@ -21,7 +22,7 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 
 
     @Autowired
-    private JavaMailSender mailSender;
+    private EmailService emailService;
 
     @Autowired
     private Environment env;
@@ -43,22 +44,9 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
 
         userService.createVerificationTokenForUser(user, token);
 
-        SimpleMailMessage email = constructEmailMessage(event, user, token);
-        mailSender.send(email);
-    }
-
-    private final SimpleMailMessage constructEmailMessage(OnRegistrationCompleteEvent event, User user, String token)
-    {
-        String recipientAddress = user.getEmail();
-        String subject = "Registration Confirmation";
         String confirmationUrl = event.getAppUrl() + "/registerConfirm.html?token=" + token;
         String message = "You registered successfully. We will send you a confirmation message to your email account.";
-        SimpleMailMessage email = new SimpleMailMessage();
-        email.setTo(recipientAddress);
-        email.setSubject(subject);
-        email.setText(message + " \r\n" + "http://localhost:8080" + confirmationUrl);
-        email.setFrom(env.getProperty("support.email"));
-        return email;
+        String completeMessage = message + " \r\n" + "http://localhost:8080" + confirmationUrl;
+        emailService.send("Registration Confirmation", completeMessage, user.getEmail(), env.getProperty("support.email"));
     }
-
 }
