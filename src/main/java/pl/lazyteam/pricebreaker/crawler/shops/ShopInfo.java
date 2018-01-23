@@ -59,12 +59,15 @@ public class ShopInfo {
         else
             productInfo.setProductScore(0);
 
+        String urlI=element.select("img[data-src]").first().attr("data-src");
         productInfo.setProductImageUrl(
-                element.select("img[data-src]").first().attr("data-src")
+               urlI
         );
 
+        urlI=urlI.split("/")[5];
+
         productInfo.setProductUrl(
-               url + element.select("a[href]").first().attr("href")
+               url + "/" +urlI
         );
 
         productInfo.setProductName(
