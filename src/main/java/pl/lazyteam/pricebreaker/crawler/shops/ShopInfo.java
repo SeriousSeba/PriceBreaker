@@ -64,11 +64,24 @@ public class ShopInfo {
                urlI
         );
 
-        urlI=urlI.split("/")[5];
+        try {
+            urlI = urlI.split("/")[5];
+        }
+        catch (Exception e){
+            urlI=null;
+        }
 
+        if(urlI!=null)
         productInfo.setProductUrl(
                url + "/" +urlI
         );
+
+        else
+
+            productInfo.setProductUrl(
+                    element.select("a[href]").first().attr("href")
+            );
+
 
         productInfo.setProductName(
                 element.select("div.list-prod-name").first().text()
