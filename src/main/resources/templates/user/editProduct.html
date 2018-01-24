@@ -52,6 +52,8 @@
             <div class="">
                 <table class="table table-bordered">
                     <form action="#" th:action="@{/user/editProduct}" th:object="${flagEditForm}" method="POST">
+                        <input type="hidden" th:value="${product.id}" name="productId" id="productId"/>
+                        <input type="hidden" th:value="False" name="priceLower" id="priceLower"/>
                         <tr>
                             <td class="text-center"><b>Price change (in %)</b></td>
                             <td class="text-center"><b>Price dropped</b></td>
@@ -66,20 +68,20 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <div th:if="${priceLowers == true}" align="center">
-                                        <button type="button" class="btn btn-success" th:onclick="'javascript:negateValue(' + ${productFlags.price_lowers} + ')'">
+                                    <div align="center">
+                                        <button type="button" class="btn btn-success" onclick="javascript:document.getElementById('priceLower').value='True'">
                                             <span class="glyphicon glyphicon-ok"></span>
                                         </button>
                                     </div>
-                                    <div th:unless="${priceLowers == true}" align="center">
-                                        <button type="button" class="btn btn-danger" th:onclick="'javascript:negateValue(' + ${productFlags.price_lowers} + ')'">
+                                    <div align="center">
+                                        <button type="button" class="btn btn-danger" onclick="javascript:document.getElementById('priceLower').value='False'">
                                             <span class="glyphicon glyphicon-remove"></span>
                                         </button>
                                     </div>
                                 </td>
                                 <td>
                                     <div th:if="${priceLowers == true}" align="center">
-                                        <button type="button" class="btn btn-danger" th:onclick="'javascript:negateValue(' + ${productFlags.price_lowers} + ')'">
+                                        <button type="button" class="btn btn-danger" onclick="javascript:document.getElementById('priceLower').value='False'">
                                             <span class="glyphicon glyphicon-remove"></span>
                                         </button>
                                     </div>

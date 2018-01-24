@@ -170,6 +170,20 @@ public class UserController
         return "user/editProduct";
     }
 
+    @PostMapping(value="/user/editProduct")
+    public String editProduct(Model model, @ModelAttribute(value="priceChange") Double priceChange, @ModelAttribute(value = "productId") Long productId, @ModelAttribute(value = "priceLower") String priceLower){
+        ProductFlags productFlags=productFlagsDao.getOne(productId);
+        productFlags.setPriceChange(priceChange/100);
+        if(priceLower.equals("True")){
+            productFlags.setPrice_lowers(true);
+        }
+        else{
+            productFlags.setPrice_lowers(false);
+        }
+        productFlagsDao.save(productFlags);
+        return "user/products";
+    }
+
     //@PostMapping("/user/products/add/{productName}/{productUrl}/{productScore}/{productCategory}/{productBottom}/{productImageUrl}/{productId}")
     @PostMapping("/user/products/add")
     public String addProduct(@ModelAttribute(value = "productinfo") ProductInfo productInfo, Model model){
