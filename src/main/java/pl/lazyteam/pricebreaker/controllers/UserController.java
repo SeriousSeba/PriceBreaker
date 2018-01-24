@@ -110,7 +110,7 @@ public class UserController
     }
 
     @PostMapping(value = "/registerSuccess")
-    public String submitSuccess(@ModelAttribute("registerForm") RegisterForm registerForm, Model model, BindingResult result, WebRequest request)
+    public String submitSuccess(@ModelAttribute("registerForm") RegisterForm registerForm, BindingResult result, WebRequest request)
     {
         registrationValidator.validate(registerForm, result);
         if(result.hasErrors())
@@ -170,18 +170,22 @@ public class UserController
         return "user/editProduct";
     }
 
-    @PostMapping(value="/user/editProduct")
-    public String editProduct(Model model, @ModelAttribute(value="priceChange") Double priceChange, @ModelAttribute(value = "productId") Long productId, @ModelAttribute(value = "priceLower") String priceLower){
-        ProductFlags productFlags=productFlagsDao.getOne(productId);
-        productFlags.setPriceChange(priceChange/100);
-        if(priceLower.equals("True")){
-            productFlags.setPrice_lowers(true);
-        }
-        else{
-            productFlags.setPrice_lowers(false);
-        }
+    @PostMapping(value = "/editProduct/{id}")
+    public String editProductButtonPressed(@PathVariable("id") Long id, @ModelAttribute("flagEditForm") FlagEditForm flagEditForm)
+    {
+        ProductInfo product = productDAO.getOne(id);
+        ProductFlags productFlags = new ProductFlags(product,flagEditForm.getPriceChange()/100,!productFlagsDao.getOne(id).isPrice_lowers());
         productFlagsDao.save(productFlags);
-        return "user/products";
+        return "redirect:/editProduct/" + id;
+    }
+
+    @PostMapping(value = "/editProduct/confirm/{id}")
+    public String editProductConfirmPressed(@PathVariable("id") Long id, @ModelAttribute("flagEditForm") FlagEditForm flagEditForm)
+    {
+        ProductInfo product = productDAO.getOne(id);
+        ProductFlags productFlags = new ProductFlags(product,flagEditForm.getPriceChange()/100,productFlagsDao.getOne(id).isPrice_lowers());
+        productFlagsDao.save(productFlags);
+        return "redirect:/user/products";
     }
 
     //@PostMapping("/user/products/add/{productName}/{productUrl}/{productScore}/{productCategory}/{productBottom}/{productImageUrl}/{productId}")

@@ -51,51 +51,52 @@
             </div>
             <div class="">
                 <table class="table table-bordered">
-                    <form action="#" th:action="@{/user/editProduct}" th:object="${flagEditForm}" method="POST">
-                        <input type="hidden" th:value="${product.id}" name="productId" id="productId"/>
-                        <input type="hidden" th:value="False" name="priceLower" id="priceLower"/>
+                    <form action="#" th:action="@{'/editProduct/' + ${product.id}}" th:object="${flagEditForm}" method="POST">
                         <tr>
                             <td class="text-center"><b>Price change (in %)</b></td>
                             <td class="text-center"><b>Price dropped</b></td>
                             <td class="text-center"><b>Price raised</b></td>
                         </tr>
                         <tr>
-                            <div th:with="priceLowers=${productFlags.isPrice_lowers()}">
+                            <div>
                                 <td>
                                     <div align="center">
                                         <label><input th:id="flagPrice" th:value="${productFlags.getPriceChange()}" style="display:none;"/></label>
-                                        <label><input th:id="inputPrice" type="number" th:field="*{priceChange}" onkeypress="return event.charCode >= 48" th:min="1"/></label>
+                                        <label><input th:id="inputPrice" type="number" th:field="*{priceChange}" onkeypress="return event.charCode >= 49" th:min="1" onchange="changeChange()"/></label>
                                     </div>
                                 </td>
                                 <td>
-                                    <div align="center">
-                                        <button type="button" class="btn btn-success" onclick="javascript:document.getElementById('priceLower').value='True'">
+                                    <div th:if="${productFlags.isPrice_lowers() == true}" align="center">
+                                        <button type="submit" class="btn btn-success">
                                             <span class="glyphicon glyphicon-ok"></span>
                                         </button>
                                     </div>
-                                    <div align="center">
-                                        <button type="button" class="btn btn-danger" onclick="javascript:document.getElementById('priceLower').value='False'">
+                                    <div th:unless="${productFlags.isPrice_lowers() == true}" align="center">
+                                        <button type="submit" class="btn btn-danger">
                                             <span class="glyphicon glyphicon-remove"></span>
                                         </button>
                                     </div>
                                 </td>
                                 <td>
-                                    <div th:if="${priceLowers == true}" align="center">
-                                        <button type="button" class="btn btn-danger" onclick="javascript:document.getElementById('priceLower').value='False'">
+                                    <div th:if="${productFlags.isPrice_lowers() == true}" align="center">
+                                        <button type="submit" class="btn btn-danger">
                                             <span class="glyphicon glyphicon-remove"></span>
                                         </button>
                                     </div>
-                                    <div th:unless="${priceLowers == true}" align="center">
-                                        <button type="button" class="btn btn-success" th:onclick="'javascript:negateValue(' + ${productFlags.price_lowers} + ')'">
+                                    <div th:unless="${productFlags.isPrice_lowers() == true}" align="center">
+                                        <button type="submit" class="btn btn-success">
                                             <span class="glyphicon glyphicon-ok"></span>
                                         </button>
                                     </div>
                                 </td>
                             </div>
                         </tr>
+                    </form>
+                    <form action="#" th:action="@{'/editProduct/confirm/' + ${product.id}}" th:object="${flagEditForm}" method="POST">
                         <tr>
                             <div>
                                 <td>
+                                    <label><input th:id="inputPrice2" type="number" th:field="*{priceChange}" style="display:none;"/></label>
                                     <button type="submit" class="btn btn-primary btn-success btn-block"><strong>Confirm</strong></button>
                                 </td>
                             </div>
@@ -117,13 +118,14 @@
 <script src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 <script>
-    document.getElementById('inputPrice').value =  document.getElementById('flagPrice').value * 100;
+    document.getElementById('inputPrice').value =  Math.round(document.getElementById('flagPrice').value * 100);
+    document.getElementById('inputPrice2').value =  document.getElementById('inputPrice').value;
 </script>
 
-<script type="text/javascript">
-    function negateValue(priceLowers)
+<script>
+    function changeChange()
     {
-        priceLowers = !priceLowers;
+       document.getElementById("inputPrice2").value = Math.round(document.getElementById('inputPrice').value);
     }
 </script>
 
