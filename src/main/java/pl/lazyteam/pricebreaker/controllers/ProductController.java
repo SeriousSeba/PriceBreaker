@@ -31,6 +31,9 @@ public class ProductController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    ProductFlagsDao productFlagsDao;
+
     @GetMapping("products/{id}")
     public ProductInfo getProductById(@PathVariable(value="id") Long id){
         ProductInfo productInfo=productDAO.findOne(id);
@@ -52,8 +55,17 @@ public class ProductController {
             user.getProducts().remove(productInfo);
         }
         productDAO.delete(id);
-
+        productFlagsDao.delete(id);
         return "redirect:/products/all";
+    }
+
+    @GetMapping("/myProducts/delete/{id}")
+    public String deleteMyProduct(@PathVariable(value="id") Long id){
+        ProductInfo productInfo=productDAO.getOne(id);
+        userService.findUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName()).getProducts().remove(productInfo);
+        productDAO.delete(id);
+        productFlagsDao.delete(id);
+        return "redirect:/user/products";
     }
 
     @GetMapping("/products/update")

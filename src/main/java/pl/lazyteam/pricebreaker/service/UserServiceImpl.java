@@ -130,10 +130,11 @@ public class UserServiceImpl implements UserService
         return false;
     }
 
-    public boolean priceChanged(ProductInfo product, double newPrice)
+    public boolean priceChanged(ProductInfo product)
     {
         ProductFlags flags = productFlagsDao.getOne(product.getId());
-        double oldPrice = product.getProductBottom();
+        double newPrice = product.getProductBottom();
+        double oldPrice = flags.getFlagEditionPrice();
         if (flags.isPrice_lowers())
         {
             if (oldPrice > newPrice)

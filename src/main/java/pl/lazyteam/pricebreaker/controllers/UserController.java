@@ -222,6 +222,8 @@ public class UserController
     {
         User user=userService.findUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         DefaultUserFlags defaultUserFlags = defaultFlagsDao.getOne(user.getUser_id());
+        if (flagEditForm.getPriceChange() == 0)
+            flagEditForm.setPriceChange(1);
         defaultUserFlags.setPriceChange(flagEditForm.getPriceChange()/100);
         defaultFlagsDao.save(defaultUserFlags);
         return "redirect:/home";

@@ -12,6 +12,9 @@ public class ProductFlags
 
     private double priceChange;
 
+    private double flagEditionPrice;
+
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(nullable = false, name = "id")
     private ProductInfo product;
@@ -27,6 +30,7 @@ public class ProductFlags
         this.product = product;
         this.price_lowers = price_lowers;
         this.id = product.getId();
+        this.flagEditionPrice = product.getProductBottom();
     }
 
     public Long getId()
@@ -62,6 +66,16 @@ public class ProductFlags
     public boolean isPrice_lowers()
     {
         return price_lowers;
+    }
+
+    public double getFlagEditionPrice()
+    {
+        return flagEditionPrice;
+    }
+
+    public void setFlagEditionPrice(double flagEditionPrice)
+    {
+        this.flagEditionPrice = flagEditionPrice;
     }
 
     public void setPrice_lowers(boolean price_lowers)

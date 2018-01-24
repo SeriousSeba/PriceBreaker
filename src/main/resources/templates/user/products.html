@@ -77,7 +77,7 @@
                                 <a class="btn btn-primary" th:href="@{'/editProduct/' + ${product.id}}">Flags</a>
                             </td>
                             <td class="text-center">
-                                <a class="btn btn-primary" href="#">-</a>
+                                <a class="btn btn-primary" th:href="@{'/myProducts/delete/' + ${product.id}}">-</a>
                             </td>
                         </div>
                     </tr>
