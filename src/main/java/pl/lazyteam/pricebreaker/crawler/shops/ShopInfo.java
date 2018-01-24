@@ -59,13 +59,29 @@ public class ShopInfo {
         else
             productInfo.setProductScore(0);
 
+        String urlI=element.select("img[data-src]").first().attr("data-src");
         productInfo.setProductImageUrl(
-                element.select("img[data-src]").first().attr("data-src")
+               urlI
         );
 
+        try {
+            urlI = urlI.split("/")[5];
+        }
+        catch (Exception e){
+            urlI=null;
+        }
+
+        if(urlI!=null)
         productInfo.setProductUrl(
-               url + element.select("a[href]").first().attr("href")
+               url + "/" +urlI
         );
+
+        else
+
+            productInfo.setProductUrl(
+                    element.select("a[href]").first().attr("href")
+            );
+
 
         productInfo.setProductName(
                 element.select("div.list-prod-name").first().text()
