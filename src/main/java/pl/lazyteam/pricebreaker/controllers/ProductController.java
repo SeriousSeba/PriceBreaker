@@ -23,6 +23,9 @@ import pl.lazyteam.pricebreaker.service.UserService;
 import javax.validation.Valid;
 import java.util.*;
 
+/**
+ * ProductController is a class that allows users to manage theirs products. They can add, delete or edit positions on theirs list.
+ */
 @Controller
 public class ProductController {
     @Autowired
@@ -31,8 +34,16 @@ public class ProductController {
     @Autowired
     UserService userService;
 
+
+    /**
+     * Method that allows to get ProductInfo object which contains information like URL, rating, image, price of product.
+     * @param id product id
+     * @return ProductInfo object with information about products
+     */
+
     @Autowired
     ProductFlagsDao productFlagsDao;
+
 
     @GetMapping("products/{id}")
     public ProductInfo getProductById(@PathVariable(value="id") Long id){
@@ -40,6 +51,11 @@ public class ProductController {
         return productInfo;
     }
 
+    /**
+     * Method that allows to get list of all products in database.
+     * @param model holder for model attributes
+     * @return list of ProductInfo
+     */
     @GetMapping("/products/all")
     public List<ProductInfo> getAllProducts(Model model){
         if (model != null)
@@ -47,6 +63,11 @@ public class ProductController {
         return productDAO.findAll();
     }
 
+    /**
+     * Method that allows user to delete product from his list.
+     * @param id product id
+     * @return redirect path to list of products
+     */
     @GetMapping("/products/delete/{id}")
     public String delete(@PathVariable(value="id") Long id){
         ProductInfo productInfo=productDAO.getOne(id);
@@ -59,6 +80,11 @@ public class ProductController {
         return "redirect:/products/all";
     }
 
+
+    /**
+     * Method allows to update all products in database.
+     * @return redirect path to list of products
+     */
     @GetMapping("/myProducts/delete/{id}")
     public String deleteMyProduct(@PathVariable(value="id") Long id){
         ProductInfo productInfo=productDAO.getOne(id);
@@ -67,6 +93,7 @@ public class ProductController {
         productFlagsDao.delete(id);
         return "redirect:/user/products";
     }
+
 
     @GetMapping("/products/update")
     public String update(){
@@ -81,12 +108,22 @@ public class ProductController {
     }
 
 
-
+    /**
+     * Method allows to add new product to database.
+     * @param productInfo object ProductInfo with information about product
+     * @return ProductInfo object which was added to database
+     */
     @PostMapping("products/add")
     public ProductInfo add(@Valid @RequestBody ProductInfo productInfo){ return productDAO.save(productInfo); }
 
 
-
+    /**
+     * Method that allows to search products. It add search form to page.
+     * @param model holder for model attributes
+     * @param error String with information about error
+     * @param product name of product to search
+     * @return
+     */
     @GetMapping("/search")
     public String searchForm(Model model, @RequestParam(value="error", required = false) String error, @RequestParam(value="product", required = false) String product){
 
@@ -122,6 +159,13 @@ public class ProductController {
         return "/search";
     }
 
+    /**
+     * Method that allows to search products. It run crawler and get information from shops about searched products.
+     * @param model holder for model attributes
+     * @param error String with information about error
+     * @param product product name of product to search
+     * @return
+     */
     @GetMapping("/search/{product}")
     public List<ProductInfo> search(Model model, @RequestParam(value="error", required = false) String error, @RequestParam(value="product", required = true) String product){
         ShopInfo shopInfo=new ShopInfo("Ceneo",

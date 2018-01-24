@@ -9,20 +9,16 @@ import pl.lazyteam.pricebreaker.entity.ProductInfo;
 
 import java.util.List;
 
+/**
+ * Class that allows crawling products
+ */
 @RestController
 public class CrawlerController {
-
-//    @RequestMapping("/crawler")
-//    public String crawl(){
-//        ShopInfo shopInfo=new ShopInfo("Ceneo","https://www.ceneo.pl",
-//                "https://www.ceneo.pl/;szukaj-","",
-//                "div[data-pid]");//
-//        WebShop webShop=new WebShop(shopInfo);
-//        ShopCrawler shopCrawler=new ShopCrawler(webShop,"Pan Tadeusz",2);
-//        JsonObject jsonObject=shopCrawler.getResult();
-//        return jsonObject.toString();
-//    }
-
+    /**
+     * Method that allows search products and return list of founded items.
+     * @param product product name
+     * @return list of products
+     */
     @RequestMapping("/search/{product}")
     public List<ProductInfo> crawlProduct(String product){
         ShopInfo shopInfo=new ShopInfo("Ceneo",

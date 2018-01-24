@@ -56,26 +56,6 @@ public class ProductsScheduler {
             productInfo.setLastUpdate(new Date());
             productDAO.save(productInfo);
             ProductFlags productFlags = productFlagsDao.getOne(productInfo.getId());
-            if (userService.priceChanged(productInfo))
-            {
-                Set<User> set=productInfo.getUsers();
-                for(User user:set)
-                {
-                    StringBuilder sb = new StringBuilder();
-                    sb.append("Price for your product has changed:");
-                    sb.append(" \r\n");
-                    sb.append("Product name: " + productInfo.getProductName());
-                    sb.append(" \r\n");
-                    sb.append("Current price: " + productInfo.getProductBottom());
-                    sb.append(" \r\n");
-                    sb.append("Last price: " + productFlags.getFlagEditionPrice());
-                    sb.append(" \r\n");
-                    sb.append("Url to product: " + productInfo.getProductUrl());
-                    String message = sb.toString();
-                    emailService.send("PriceBreaker notification", message,user.getEmail(),env.getProperty("support.email"));
-                }
-                productFlags.setFlagEditionPrice(productInfo.getProductBottom());
-            }
         }
     }
 
