@@ -41,7 +41,8 @@ public class WebShop {
             if(pageInfo==null)
                 break;
             siteURL=pageInfo.getNextSiteURL();
-            ProductInfo[] tmpInfos=validateProducts(pageInfo.getProductInfos(),productName);
+            ProductInfo[] tmpInfos=pageInfo.getProductInfos();
+            //validateProducts(pageInfo.getProductInfos(),productName);
             for(ProductInfo productInfo:tmpInfos) {
                 productInfos.addLast(productInfo);
             }
