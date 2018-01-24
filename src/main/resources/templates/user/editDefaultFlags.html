@@ -64,7 +64,7 @@
                                 <td>
                                     <div align="center">
                                         <label><input th:id="flagPrice" th:value="${productFlags.getPriceChange()}" style="display:none;"/></label>
-                                        <label><input th:id="inputPrice" type="number" th:field="*{priceChange}" onkeypress="return event.charCode >= 49" th:min="1" onchange="changeChange()"/></label>
+                                        <label><input th:id="inputPrice" type="number" th:field="*{priceChange}" onkeypress="return event.charCode >= 48" th:min="1" onchange="changeChange()"/></label>
                                     </div>
                                 </td>
                                 <td>

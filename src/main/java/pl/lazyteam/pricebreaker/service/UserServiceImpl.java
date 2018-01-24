@@ -15,9 +15,6 @@ import pl.lazyteam.pricebreaker.dao.UserDao;
 import java.util.Calendar;
 import java.util.List;
 
-/**
- * Service that manage users.
- */
 @Service
 public class UserServiceImpl implements UserService
 {
@@ -41,30 +38,16 @@ public class UserServiceImpl implements UserService
     public static final String TOKEN_VALID = "valid";
 
 
-    /**
-     * Method that allows to get list of all users.
-     * @return list of users
-     */
     public List<User> list()
     {
         return userDao.findAll();
     }
 
-    /**
-     * Method that allows to find user by his username.
-     * @param username username
-     * @return User object
-     */
     public User findUserByUsername(String username)
     {
         return userDao.findByUsername(username).get(0);
     }
 
-    /**
-     * Mathod that allows to valide user password
-     * @param password user password
-     * @return information about validation
-     */
     public boolean validatePassword(String password)
     {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -74,21 +57,12 @@ public class UserServiceImpl implements UserService
         return false;
     }
 
-    /**
-     * Method that allows to delete user
-     * @param username username
-     */
     @Override
     public void delete(String username)
     {
         userDao.deleteByUsername(username);
     }
 
-    /**
-     * Method that allows to check if email exists in database.
-     * @param email user email
-     * @return
-     */
     @Override
     public boolean emailExists(String email)
     {
@@ -97,11 +71,6 @@ public class UserServiceImpl implements UserService
         return false;
     }
 
-    /**
-     * Method that allows to update information about user
-     * @param username username
-     * @param password password
-     */
     public void update(String username, String password)
     {
         User user = findUserByUsername(username);
@@ -109,12 +78,6 @@ public class UserServiceImpl implements UserService
         userDao.save(user);
     }
 
-    /**
-     * Method that allows to add new user to database.
-     * @param username username
-     * @param password password
-     * @param email email adress
-     */
     public void add(String username, String password, String email)
     {
         User user = new User(username, passwordEncoder.encode(password), email, new UserRole(username, "ROLE_USER"));
@@ -122,33 +85,18 @@ public class UserServiceImpl implements UserService
     }
 
 
-    /**
-     * Method returns user verification token.
-     * @param verificationToken verification token
-     * @return VerificationToken object
-     */
     @Override
     public VerificationToken getVerificationToken(String verificationToken)
     {
         return tokenDao.findVerificationTokenByToken(verificationToken);
     }
 
-    /**
-     * Method that allows to create new verifcation token for user.
-     * @param user User object
-     * @param token token to generate
-     */
     @Override
     public void createVerificationTokenForUser(final User user, final String token) {
         VerificationToken myToken = new VerificationToken(token, user);
         tokenDao.save(myToken);
     }
 
-    /**
-     * Method that allows to validate verification token
-     * @param token user token
-     * @return information about validation
-     */
     @Override
     public String validateVerificationToken(String token)
     {
@@ -171,19 +119,10 @@ public class UserServiceImpl implements UserService
         return TOKEN_VALID;
     }
 
-    /**
-     * Method that allows to update user in databse.
-     * @param user
-     */
     public void updateUser(User user){
         userDao.save(user);
     }
 
-    /**
-     * Method that checks if user exists in database.
-     * @param username
-     * @return
-     */
     public boolean userExists(String username)
     {
         if (userDao.findByUsername(username).size() > 0)
@@ -191,16 +130,11 @@ public class UserServiceImpl implements UserService
         return false;
     }
 
-    /**
-     * Method that checks if price is different and update it.
-     * @param product ProductInfo object
-     * @param newPrice information about new price
-     * @return True if price was changed, else False
-     */
-    public boolean priceChanged(ProductInfo product, double newPrice)
+    public boolean priceChanged(ProductInfo product)
     {
         ProductFlags flags = productFlagsDao.getOne(product.getId());
-        double oldPrice = product.getProductBottom();
+        double newPrice = product.getProductBottom();
+        double oldPrice = flags.getFlagEditionPrice();
         if (flags.isPrice_lowers())
         {
             if (oldPrice > newPrice)

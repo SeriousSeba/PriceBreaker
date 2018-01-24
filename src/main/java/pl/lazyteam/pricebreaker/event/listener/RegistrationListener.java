@@ -2,10 +2,7 @@ package pl.lazyteam.pricebreaker.event.listener;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
-import org.springframework.context.MessageSource;
 import org.springframework.core.env.Environment;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
 import pl.lazyteam.pricebreaker.entity.User;
 import pl.lazyteam.pricebreaker.event.OnRegistrationCompleteEvent;
@@ -45,7 +42,7 @@ public class RegistrationListener implements ApplicationListener<OnRegistrationC
         userService.createVerificationTokenForUser(user, token);
 
         String confirmationUrl = event.getAppUrl() + "/registerConfirm.html?token=" + token;
-        String message = "You registered successfully. We will send you a confirmation message to your email account.";
+        String message = "This is the link to activate your account on PriceBreaker:";
         String completeMessage = message + " \r\n" + "http://localhost:8080" + confirmationUrl;
         emailService.send("Registration Confirmation", completeMessage, user.getEmail(), env.getProperty("support.email"));
     }
