@@ -58,10 +58,11 @@
                         <td class="text-center"><b>Score</b></td>
                         <td class="text-center"><b>Last Update</b></td>
                         <td class="text-center"><b>Shop</b></td>
+                        <td class="text-center"><b>Edit</b></td>
                         <td class="text-center"><b>Delete</b></td>
                     </tr>
                     <tr th:each="product : ${productsSet}">
-                        <div >
+                        <div>
                             <td class="text-center"><img th:src="${product.productImageUrl}" style="height:40px; width:40px;"/> </td>
                             <td th:text="${product.productName}" class="text-center"></td>
                             <td th:text="${product.productBottom}" class="text-center"></td>
@@ -69,6 +70,9 @@
                             <td th:text="${product.lastUpdate}" class="text-center"></td>
                             <td class="text-center">
                                 <a class="btn btn-primary" th:href="@{{url}(url=${product.productUrl})}">Go</a>
+                            </td>
+                            <td class="text-center">
+                                <a class="btn btn-primary" th:href="@{'/editProduct/' + ${product.id}}">Flags</a>
                             </td>
                             <td class="text-center">
                                 <a class="btn btn-primary" href="#">-</a>
@@ -82,6 +86,7 @@
 </div>
 <script src="/webjars/jquery/3.1.1/jquery.min.js"></script>
 <script src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
++
 
 </body>
 </html>

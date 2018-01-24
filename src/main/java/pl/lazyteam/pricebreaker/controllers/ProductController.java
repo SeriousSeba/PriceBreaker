@@ -10,8 +10,11 @@ import pl.lazyteam.pricebreaker.crawler.ShopCrawler;
 import pl.lazyteam.pricebreaker.crawler.products.ProductUpdater;
 import pl.lazyteam.pricebreaker.crawler.shops.ShopInfo;
 import pl.lazyteam.pricebreaker.crawler.shops.WebShop;
+import pl.lazyteam.pricebreaker.dao.DefaultFlagsDao;
 import pl.lazyteam.pricebreaker.dao.ProductDAO;
+import pl.lazyteam.pricebreaker.dao.ProductFlagsDao;
 import pl.lazyteam.pricebreaker.dao.UserDao;
+import pl.lazyteam.pricebreaker.entity.ProductFlags;
 import pl.lazyteam.pricebreaker.entity.ProductInfo;
 import pl.lazyteam.pricebreaker.entity.User;
 import pl.lazyteam.pricebreaker.form.SearchForm;
@@ -25,8 +28,6 @@ public class ProductController {
     @Autowired
     ProductDAO productDAO;
 
-
-
     @Autowired
     UserService userService;
 
@@ -38,7 +39,8 @@ public class ProductController {
 
     @GetMapping("/products/all")
     public List<ProductInfo> getAllProducts(Model model){
-        model.addAttribute("productsList", productDAO.findAll());
+        if (model != null)
+            model.addAttribute("productsList", productDAO.findAll());
         return productDAO.findAll();
     }
 
@@ -69,9 +71,7 @@ public class ProductController {
 
 
     @PostMapping("products/add")
-    public ProductInfo add(@Valid @RequestBody ProductInfo productInfo){
-        return productDAO.save(productInfo);
-    }
+    public ProductInfo add(@Valid @RequestBody ProductInfo productInfo){ return productDAO.save(productInfo); }
 
 
 

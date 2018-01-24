@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Edit Product</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link href="../static/css/main.css" th:href="@{/css/main.css}" rel="stylesheet" />
+</head>
+<body class="bg">
+
+<!-- Navbar -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" th:href="@{'/home'}">PriceBreaker</a>
+        </div>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">MY PROFILE
+                    <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a th:href="@{'/changePassword/'}">CHANGE PASSWORD</a></li>
+                </ul>
+            </li>
+            <li><a th:href="@{'/logout'}"><span class="glyphicon glyphicon-log-out"></span> LOGOUT</a></li>
+        </ul>
+        <div class="nav navbar-nav navbar-right">
+            <a class="navbar-brand" th:href="@{'/home'}">Home</a>
+        </div>
+        <div class="nav navbar-nav navbar-right">
+            <a class="navbar-brand" th:href="@{'/user/products'}">My List</a>
+        </div>
+        <div class="nav navbar-nav navbar-right">
+            <a class="navbar-brand" th:href="@{'/search'}">Search</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container full-height">
+    <div class="row form-height">
+        <div class="col-sm-6 col-sm-offset-3 well offset4 form-v-middle">
+            <div class="">
+                <div class="text-success">
+                    <h3 th:text="${message}"></h3>
+                </div>
+            </div>
+            <div class="">
+                <div class="text-warning">
+                        <h3>Editing <th th:text="${product.productName}"/></h3>
+                </div>
+            </div>
+            <div class="">
+                <table class="table table-bordered">
+                    <form action="#" th:action="@{/user/editProduct}" th:object="${flagEditForm}" method="POST">
+                        <input type="hidden" th:value="${product.id}" name="productId" id="productId"/>
+                        <input type="hidden" th:value="False" name="priceLower" id="priceLower"/>
+                        <tr>
+                            <td class="text-center"><b>Price change (in %)</b></td>
+                            <td class="text-center"><b>Price dropped</b></td>
+                            <td class="text-center"><b>Price raised</b></td>
+                        </tr>
+                        <tr>
+                            <div th:with="priceLowers=${productFlags.isPrice_lowers()}">
+                                <td>
+                                    <div align="center">
+                                        <label><input th:id="flagPrice" th:value="${productFlags.getPriceChange()}" style="display:none;"/></label>
+                                        <label><input th:id="inputPrice" type="number" th:field="*{priceChange}" onkeypress="return event.charCode >= 48" th:min="1"/></label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div align="center">
+                                        <button type="button" class="btn btn-success" onclick="javascript:document.getElementById('priceLower').value='True'">
+                                            <span class="glyphicon glyphicon-ok"></span>
+                                        </button>
+                                    </div>
+                                    <div align="center">
+                                        <button type="button" class="btn btn-danger" onclick="javascript:document.getElementById('priceLower').value='False'">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div th:if="${priceLowers == true}" align="center">
+                                        <button type="button" class="btn btn-danger" onclick="javascript:document.getElementById('priceLower').value='False'">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </button>
+                                    </div>
+                                    <div th:unless="${priceLowers == true}" align="center">
+                                        <button type="button" class="btn btn-success" th:onclick="'javascript:negateValue(' + ${productFlags.price_lowers} + ')'">
+                                            <span class="glyphicon glyphicon-ok"></span>
+                                        </button>
+                                    </div>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <div>
+                                <td>
+                                    <button type="submit" class="btn btn-primary btn-success btn-block"><strong>Confirm</strong></button>
+                                </td>
+                            </div>
+                        </tr>
+                        <tr>
+                            <div>
+                                <td>
+                                    <a class="btn btn-primary btn-block" th:href="@{'/user/products'}">Back</a>
+                                </td>
+                            </div>
+                        </tr>
+                    </form>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/webjars/jquery/3.1.1/jquery.min.js"></script>
+<script src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<script>
+    document.getElementById('inputPrice').value =  document.getElementById('flagPrice').value * 100;
+</script>
+
+<script type="text/javascript">
+    function negateValue(priceLowers)
+    {
+        priceLowers = !priceLowers;
+    }
+</script>
+
+
+</body>
+</html>
