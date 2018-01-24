@@ -10,6 +10,9 @@ import pl.lazyteam.pricebreaker.entity.VerificationToken;
 import javax.transaction.Transactional;
 import java.util.Date;
 
+/**
+ * DAO that represnts user tokens.
+ */
 @Transactional
 @Repository
 public interface TokenDao extends CrudRepository<VerificationToken, Integer>

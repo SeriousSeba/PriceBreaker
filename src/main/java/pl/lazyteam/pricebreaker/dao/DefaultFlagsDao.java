@@ -6,6 +6,9 @@ import pl.lazyteam.pricebreaker.entity.DefaultUserFlags;
 
 import javax.transaction.Transactional;
 
+/**
+ * DAO that represents default flags.
+ */
 @Transactional
 @Repository
 public interface DefaultFlagsDao extends JpaRepository<DefaultUserFlags, Integer>

@@ -29,6 +29,9 @@ import pl.lazyteam.pricebreaker.validator.RegistrationValidator;
 
 import java.util.*;
 
+/**
+ * UserController class allows user to manage account and product on his list.
+ */
 @Controller
 public class UserController
 {
@@ -55,8 +58,12 @@ public class UserController
     DefaultFlagsDao defaultFlagsDao;
 
 
-
-
+    /**
+     * Method allows user to change his password
+     * @param username name of the user
+     * @param model holder for model attributes
+     * @return
+     */
     @GetMapping(value ="/changePassword/{username}")
     public String changePassword(@PathVariable("username") String username, Model model)
     {
@@ -80,6 +87,11 @@ public class UserController
         return "user/password/changePassword";
     }
 
+    /**
+     * Method redirecting user to change his password
+     * @param model holder for model attributes
+     * @return redirect path to place where user can change password
+     */
     @GetMapping(value ="/changePassword")
     public String changePassword(Model model)
     {
@@ -87,6 +99,13 @@ public class UserController
         return "redirect:/changePassword/" + user.getUsername();
     }
 
+    /**
+     * Method shows user a page when password is successfully changed.
+     * @param passwordChangeForm form with information about new password
+     * @param model holder for model attributes
+     * @param result redirect path
+     * @return
+     */
     @PostMapping(value = "passwordChangeSuccess")
     public String passwordChangeSuccess(@ModelAttribute("passwordChangeForm") PasswordChangeForm passwordChangeForm, Model model, BindingResult result)
     {
@@ -104,6 +123,11 @@ public class UserController
         }
     }
 
+    /**
+     * Method that allows user to register. It adds a register form to page.
+     * @param model holder for model attributes
+     * @return redirect path
+     */
     @GetMapping(value = "/register")
     public String register(Model model)
     {
@@ -116,6 +140,13 @@ public class UserController
         return "user/register/register";
     }
 
+    /**
+     * Method that validates register form and adds user.
+     * @param registerForm form with user data
+     * @param result result of validation
+     * @param request request
+     * @return redirect path
+     */
     @PostMapping(value = "/registerSuccess")
     public String submitSuccess(@ModelAttribute("registerForm") RegisterForm registerForm, BindingResult result, WebRequest request)
     {
@@ -143,6 +174,13 @@ public class UserController
         }
     }
 
+    /**
+     * Method that activate account.
+     * @param model holder for model attributes
+     * @param token user token
+     * @param redirectAttributes redirect attributes
+     * @return redirect path
+     */
     @GetMapping(value = "/registerConfirm")
     public String registerConfirm(Model model, @RequestParam("token") String token,  RedirectAttributes redirectAttributes)
     {
@@ -156,6 +194,11 @@ public class UserController
         return "redirect:/emailError";
     }
 
+    /**
+     * Method that allows user to get list of his products.
+     * @param model holder for model attributes
+     * @return
+     */
     @GetMapping("/user/products")
     public Set<ProductInfo> getAllProducts(Model model){
         User user=userService.findUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
@@ -165,6 +208,12 @@ public class UserController
         return user.getProducts();
     }
 
+    /**
+     * Method that allows to edit user product
+     * @param id product id
+     * @param model holder for model attributes
+     * @return
+     */
     @GetMapping(value = "/editProduct/{id}")
     public String editProduct(@PathVariable("id") Long id, Model model)
     {
@@ -177,6 +226,12 @@ public class UserController
         return "user/editProduct";
     }
 
+    /**
+     * Method that manage flags in product edit page.
+     * @param id product id
+     * @param flagEditForm form with informations about flags
+     * @return
+     */
     @PostMapping(value = "/editProduct/{id}")
     public String editProductButtonPressed(@PathVariable("id") Long id, @ModelAttribute("flagEditForm") FlagEditForm flagEditForm)
     {
@@ -186,6 +241,12 @@ public class UserController
         return "redirect:/editProduct/" + id;
     }
 
+    /**
+     * Method that updates flag of products.
+     * @param id product id
+     * @param flagEditForm form with informations about product
+     * @return redirect path to list of products
+     */
     @PostMapping(value = "/editProduct/confirm/{id}")
     public String editProductConfirmPressed(@PathVariable("id") Long id, @ModelAttribute("flagEditForm") FlagEditForm flagEditForm)
     {
@@ -195,6 +256,11 @@ public class UserController
         return "redirect:/user/products";
     }
 
+    /**
+     * Method that sets default flag for users.
+     * @param model holder for model attributes
+     * @return
+     */
     @GetMapping(value = "/editDefaultFlags")
     public String editDefaultFlags(Model model)
     {
@@ -206,6 +272,11 @@ public class UserController
         return "user/editDefaultFlags";
     }
 
+    /**
+     * Method that manage change of default flags.
+     * @param flagEditForm form with information about flags
+     * @return redirect path
+     */
     @PostMapping(value = "/editDefaultFlags")
     public String editDefaultFlagsButtonPressed(@ModelAttribute("flagEditForm") FlagEditForm flagEditForm)
     {
@@ -217,6 +288,11 @@ public class UserController
         return "redirect:/editDefaultFlags";
     }
 
+    /**
+     * Method that changes default flags
+     * @param flagEditForm form with information about flags
+     * @return redirect path to homepage
+     */
     @PostMapping(value = "/editDefaultFlags/confirm")
     public String editDefaultFlagsConfirmPressed(@ModelAttribute("flagEditForm") FlagEditForm flagEditForm)
     {
@@ -227,19 +303,14 @@ public class UserController
         return "redirect:/home";
     }
 
-    //@PostMapping("/user/products/add/{productName}/{productUrl}/{productScore}/{productCategory}/{productBottom}/{productImageUrl}/{productId}")
+    /**
+     * Method that allows user to add new products.
+     * @param productInfo information about product
+     * @param model holder for model attributes
+     * @return redirect path to list of products
+     */
     @PostMapping("/user/products/add")
     public String addProduct(@ModelAttribute(value = "productinfo") ProductInfo productInfo, Model model){
-    //public String addProduct(Model model, @PathVariable("productName") String productName, @PathVariable("productUrl") String productUrl,@PathVariable("productScore") double productScore,@PathVariable("productCategory") String prodcutCategory,@PathVariable("productBottom") double productBottom,@PathVariable("productImageUrl") String productImageUrl,@PathVariable("productId") String productId){
-        /*ProductInfo productInfo=new ProductInfo();
-        productInfo.setProductName(productName);
-        productInfo.setProductUrl(productUrl);
-        productInfo.setProductScore(productScore);
-        productInfo.setProductCategory(prodcutCategory);
-        productInfo.setProductBottom(productBottom);
-        productInfo.setProductImageUrl(productImageUrl);
-        productInfo.setProductId(productId);*/
-
         productInfo.setLastUpdate(new Date());
         User user=userService.findUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 
@@ -263,23 +334,30 @@ public class UserController
     }
 
 
-
-
-
-
-
+    /**
+     * Method that inform user about lack of access.
+     * @return redirect path
+     */
     @GetMapping(value = "/accessDenied")
     public String accessDenied()
     {
         return "user/error/accessDenied";
     }
 
+    /**
+     * Method that inform user about wrong email
+     * @return redirect path
+     */
     @GetMapping(value = "/emailError")
     public String emailError()
     {
         return "user/error/emailError";
     }
 
+    /**
+     * Method that inform user about account activation.
+     * @return redirect path
+     */
     @GetMapping(value = "/accountActivated")
     public String accountActivated()
     {

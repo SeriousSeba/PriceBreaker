@@ -7,6 +7,9 @@ import pl.lazyteam.pricebreaker.entity.ProductInfo;
 
 import javax.transaction.Transactional;
 
+/**
+ * DAO that represnts products.
+ */
 @Transactional
 @Repository
 public interface ProductDAO extends JpaRepository<ProductInfo, Long> {

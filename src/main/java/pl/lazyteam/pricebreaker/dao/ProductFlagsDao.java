@@ -7,6 +7,9 @@ import pl.lazyteam.pricebreaker.entity.ProductFlags;
 
 import javax.transaction.Transactional;
 
+/**
+ * DAO that represent product flags.
+ */
 @Transactional
 @Repository
 public interface ProductFlagsDao extends JpaRepository<ProductFlags, Long>

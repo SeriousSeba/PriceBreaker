@@ -15,6 +15,9 @@ import pl.lazyteam.pricebreaker.entity.User;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Service that manage email sending.
+ */
 @Service
 public class EmailService
 {
@@ -22,12 +25,27 @@ public class EmailService
     @Autowired
     private JavaMailSender mailSender;
 
+    /**
+     * Mathod that sends emails.
+     * @param subject email subject
+     * @param message email message
+     * @param recipient email recipient
+     * @param sender email sender
+     */
     public void send(String subject, String message, String recipient, String sender)
     {
         SimpleMailMessage email = constructEmailMessage(subject, message, recipient, sender);
         mailSender.send(email);
     }
 
+    /**
+     * Method that allows to construct email.
+     * @param subject email subject
+     * @param message email message
+     * @param recipient email recipient
+     * @param sender email sender
+     * @return
+     */
     private SimpleMailMessage constructEmailMessage(String subject, String message, String recipient, String sender)
     {
         SimpleMailMessage email = new SimpleMailMessage();

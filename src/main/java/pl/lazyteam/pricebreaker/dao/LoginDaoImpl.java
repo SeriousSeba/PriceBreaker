@@ -9,12 +9,20 @@ import pl.lazyteam.pricebreaker.entity.User;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implementation of LoginDAO
+ */
 @Component
 public class LoginDaoImpl implements  LoginDao {
 
     @Autowired
     UserDao userDao;
 
+    /**
+     * Method allows to find user by his username
+     * @param username username
+     * @return object User
+     */
     @Override
     public User findUser(String username) {
         List<User> list = userDao.findByUsername(username);
@@ -26,6 +34,11 @@ public class LoginDaoImpl implements  LoginDao {
         }
     }
 
+    /**
+     * Method that allows to get user role(admin,user)
+     * @param username username
+     * @return list of roles
+     */
     @Override
     public List<String> getUserRoles(String username) {
         List<User> list = userDao.findByUsername(username);

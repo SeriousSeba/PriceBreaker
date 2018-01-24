@@ -8,6 +8,9 @@ import pl.lazyteam.pricebreaker.entity.User;
 import javax.transaction.Transactional;
 import java.util.List;
 
+/**
+ * DAO that represnts user. It alows to find, add and delete users.
+ */
 @Transactional
 @Repository
 public interface UserDao extends JpaRepository<User, Integer>
