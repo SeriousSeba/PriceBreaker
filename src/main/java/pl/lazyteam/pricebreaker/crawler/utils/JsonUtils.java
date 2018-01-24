@@ -4,9 +4,17 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import pl.lazyteam.pricebreaker.entity.ProductInfo;
 
-
+/**
+ * Helper class for working on Json resources.
+ * Convienient for future front end development
+ */
 public class JsonUtils {
 
+    /**
+     * Convers given ProductInfo class to Json object
+     * @param productInfo ProductInfo to be converted
+     * @return New Json object with infromations about product
+     */
     public static JsonObject stashProductInfo(ProductInfo productInfo){
         JsonObject jsonObject=new JsonObject();
         jsonObject.addProperty("ProductName",productInfo.getProductName());
@@ -19,6 +27,11 @@ public class JsonUtils {
         return jsonObject;
     }
 
+    /**
+     * Converts Json object to ProductInfo entity
+     * @param jsonObject Json object to be converted
+     * @return ProductInfo entity
+     */
     public static ProductInfo getProductInfo(JsonObject jsonObject){
         ProductInfo productInfo=new ProductInfo();
         String result;
