@@ -80,6 +80,13 @@ public class UserController
         return "user/password/changePassword";
     }
 
+    @GetMapping(value ="/changePassword")
+    public String changePassword(Model model)
+    {
+        User user = userService.findUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        return "redirect:/changePassword/" + user.getUsername();
+    }
+
     @PostMapping(value = "passwordChangeSuccess")
     public String passwordChangeSuccess(@ModelAttribute("passwordChangeForm") PasswordChangeForm passwordChangeForm, Model model, BindingResult result)
     {
@@ -159,7 +166,7 @@ public class UserController
     }
 
     @GetMapping(value = "/editProduct/{id}")
-    public String flagsEditted(@PathVariable("id") Long id, Model model)
+    public String editProduct(@PathVariable("id") Long id, Model model)
     {
         ProductInfo product = productDAO.getOne(id);
         ProductFlags productFlags = productFlagsDao.getOne(id);
@@ -186,6 +193,38 @@ public class UserController
         ProductFlags productFlags = new ProductFlags(product,flagEditForm.getPriceChange()/100,productFlagsDao.getOne(id).isPrice_lowers());
         productFlagsDao.save(productFlags);
         return "redirect:/user/products";
+    }
+
+    @GetMapping(value = "/editDefaultFlags")
+    public String editDefaultFlags(Model model)
+    {
+        User user=userService.findUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        DefaultUserFlags defaultUserFlags = defaultFlagsDao.getOne(user.getUser_id());
+        model.addAttribute("productFlags", defaultUserFlags);
+        model.addAttribute("flagEditForm", new FlagEditForm());
+
+        return "user/editDefaultFlags";
+    }
+
+    @PostMapping(value = "/editDefaultFlags")
+    public String editDefaultFlagsButtonPressed(@ModelAttribute("flagEditForm") FlagEditForm flagEditForm)
+    {
+        User user=userService.findUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        DefaultUserFlags defaultUserFlags = defaultFlagsDao.getOne(user.getUser_id());
+        defaultUserFlags.setPriceChange(flagEditForm.getPriceChange()/100);
+        defaultUserFlags.setPrice_lowers(!defaultUserFlags.isPrice_lowers());
+        defaultFlagsDao.save(defaultUserFlags);
+        return "redirect:/editDefaultFlags";
+    }
+
+    @PostMapping(value = "/editDefaultFlags/confirm")
+    public String editDefaultFlagsConfirmPressed(@ModelAttribute("flagEditForm") FlagEditForm flagEditForm)
+    {
+        User user=userService.findUserByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        DefaultUserFlags defaultUserFlags = defaultFlagsDao.getOne(user.getUser_id());
+        defaultUserFlags.setPriceChange(flagEditForm.getPriceChange()/100);
+        defaultFlagsDao.save(defaultUserFlags);
+        return "redirect:/home";
     }
 
     //@PostMapping("/user/products/add/{productName}/{productUrl}/{productScore}/{productCategory}/{productBottom}/{productImageUrl}/{productId}")

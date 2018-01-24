@@ -48,12 +48,12 @@
             </div>
             <div class="">
                 <div class="text-warning">
-                        <h3>Editing <th th:text="${product.productName}"/></h3>
+                        <h3>Editing default product flags</h3>
                 </div>
             </div>
             <div class="">
                 <table class="table table-bordered">
-                    <form action="#" th:action="@{'/editProduct/' + ${product.id}}" th:object="${flagEditForm}" method="POST">
+                    <form action="#" th:action="@{'/editDefaultFlags/'}" th:object="${flagEditForm}" method="POST">
                         <tr>
                             <td class="text-center"><b>Price change (in %)</b></td>
                             <td class="text-center"><b>Price dropped</b></td>
@@ -94,7 +94,7 @@
                             </div>
                         </tr>
                     </form>
-                    <form action="#" th:action="@{'/editProduct/confirm/' + ${product.id}}" th:object="${flagEditForm}" method="POST">
+                    <form action="#" th:action="@{'/editDefaultFlags/confirm/'}" th:object="${flagEditForm}" method="POST">
                         <tr>
                             <div>
                                 <td>

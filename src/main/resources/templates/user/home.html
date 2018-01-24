@@ -20,7 +20,8 @@
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">MY PROFILE
                     <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                    <li><a th:href="@{'/changePassword/' + ${user.username}}">CHANGE PASSWORD</a></li>
+                    <li><a th:href="@{'/changePassword/'}">Change Password</a></li>
+                    <li><a th:href="@{'/editDefaultFlags'}">Change Default Product Flags</a></li>
                 </ul>
             </li>
             <li><a th:href="@{'/logout'}"><span class="glyphicon glyphicon-log-out"></span> LOGOUT</a></li>
@@ -36,6 +37,7 @@
         </div>
     </div>
 </nav>
+<!-- -->
 
 <div class="container full-height">
     <div class="row form-height">
@@ -46,7 +48,7 @@
                 </div>
             </div>
 
-            <div>
+            <div align="center">
                 <a th:href="@{'/search'}" class="button">
                     <i class="fa fa-search-plus"></i> <br/>Search
                 </a>
@@ -56,7 +58,7 @@
                 </a>
 
                 <a th:if="${user.getUserRole().getUser_role() == 'ROLE_USER'}" th:href="@{'/user/products'}" class="button">
-                    <i class="fa fa-list" aria-hidden="true"></i> <br/>List
+                    <i class="fa fa-list" aria-hidden="true"></i> <br/>My Product List
                 </a>
 
                 <a class="button" th:if="${user.getUserRole().getUser_role() == 'ROLE_ADMIN'}" th:href="@{'/users'}" >
