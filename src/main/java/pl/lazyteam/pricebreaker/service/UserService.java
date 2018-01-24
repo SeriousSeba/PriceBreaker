@@ -5,6 +5,9 @@ import pl.lazyteam.pricebreaker.entity.VerificationToken;
 
 import java.util.List;
 
+/**
+ * Interface that define service to manage users.
+ */
 public interface UserService
 {
     public List<User> list();

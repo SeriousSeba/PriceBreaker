@@ -10,12 +10,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-
+/**
+ * Class that allows to manage autentication
+ */
 @Component
 public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler
 {
-
-
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request,

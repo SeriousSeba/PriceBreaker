@@ -13,17 +13,31 @@ import pl.lazyteam.pricebreaker.dao.LoginDao;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Service that manage login user to page.
+ */
 @Service
 public class LoginServiceImpl implements UserDetailsService
 {
 
     LoginDao logindao;
 
+    /**
+     * Method that sets new LoginDAO.
+     * @param logindao new LoginDAO
+     */
     @Autowired
     public void setLoginDao(LoginDao logindao)
     {
         this.logindao = logindao;
     }
+
+    /**
+     * Method that search user in database and return UserDetails object.
+     * @param username username
+     * @return UserDetails object
+     * @throws UsernameNotFoundException exception when user is not found
+     */
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException
     {
         User user = logindao.findUser(username);
