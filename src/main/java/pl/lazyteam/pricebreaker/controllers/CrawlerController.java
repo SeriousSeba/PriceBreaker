@@ -12,16 +12,16 @@ import java.util.List;
 @RestController
 public class CrawlerController {
 
-    @RequestMapping("/crawler")
-    public String crawl(){
-        ShopInfo shopInfo=new ShopInfo("Ceneo","https://www.ceneo.pl",
-                "https://www.ceneo.pl/;szukaj-","",
-                "div[data-pid]");//
-        WebShop webShop=new WebShop(shopInfo);
-        ShopCrawler shopCrawler=new ShopCrawler(webShop,"Pan Tadeusz",2);
-        JsonObject jsonObject=shopCrawler.getResult();
-        return jsonObject.toString();
-    }
+//    @RequestMapping("/crawler")
+//    public String crawl(){
+//        ShopInfo shopInfo=new ShopInfo("Ceneo","https://www.ceneo.pl",
+//                "https://www.ceneo.pl/;szukaj-","",
+//                "div[data-pid]");//
+//        WebShop webShop=new WebShop(shopInfo);
+//        ShopCrawler shopCrawler=new ShopCrawler(webShop,"Pan Tadeusz",2);
+//        JsonObject jsonObject=shopCrawler.getResult();
+//        return jsonObject.toString();
+//    }
 
     @RequestMapping("/search/{product}")
     public List<ProductInfo> crawlProduct(String product){
